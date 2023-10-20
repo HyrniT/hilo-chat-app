@@ -92,6 +92,7 @@
         android:layout_weight="10">
 
         <com.hbb20.CountryCodePicker
+            android:id="@+id/picker_country_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:ccp_showFlag="false"
@@ -101,6 +102,7 @@
             android:defaultFocusHighlightEnabled="true" />
 
         <EditText
+            android:id="@+id/edittext_login_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -120,12 +122,14 @@
         android:layout_weight="20">
 
         <Button
+            android:id="@+id/button_send_otp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SEND OTP"
             android:backgroundTint="@color/md_theme_light_primary"/>
 
         <ProgressBar
+            android:id="@+id/progress_bar_login"
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

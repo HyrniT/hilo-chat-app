@@ -91,6 +91,7 @@
         android:layout_weight="10">
 
         <EditText
+            android:id="@+id/edittext_login_otp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -111,6 +112,7 @@
         android:layout_weight="10">
 
         <Button
+            android:id="@+id/button_login_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="NEXT"
@@ -126,6 +128,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/progress_bar_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

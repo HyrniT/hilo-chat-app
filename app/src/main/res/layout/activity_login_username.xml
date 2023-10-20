@@ -92,6 +92,7 @@
         android:layout_weight="10">
 
         <EditText
+            android:id="@+id/edittext_login_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -111,12 +112,14 @@
         android:layout_weight="20">
 
         <Button
+            android:id="@+id/button_login_let_me_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="LET ME IN"
             android:backgroundTint="@color/md_theme_light_primary"/>
 
         <ProgressBar
+            android:id="@+id/progress_bar_login"
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
