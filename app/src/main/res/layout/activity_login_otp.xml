@@ -119,6 +119,7 @@
             android:backgroundTint="@color/md_theme_light_primary"/>
 
         <ProgressBar
+            android:id="@+id/progress_bar_login"
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -128,7 +129,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/progress_bar_login"
+        android:id="@+id/text_view_resend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
