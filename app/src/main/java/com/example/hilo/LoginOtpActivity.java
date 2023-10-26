@@ -29,6 +29,8 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class LoginOtpActivity extends AppCompatActivity {
@@ -36,7 +38,7 @@ public class LoginOtpActivity extends AppCompatActivity {
     private EditText inputCode1, inputCode2, inputCode3, inputCode4, inputCode5, inputCode6;
     private Button btnVerify;
     private ProgressBar pgbLogin;
-    private TextView txtResend;
+    private TextView txtResendTimer, txtResend;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Long timeoutSeconds = 60L;
@@ -59,6 +61,8 @@ public class LoginOtpActivity extends AppCompatActivity {
 
         btnVerify = findViewById(R.id.button_login_verify);
         pgbLogin = findViewById(R.id.progress_bar_login);
+        txtResend = findViewById(R.id.text_view_resend);
+        txtResendTimer = findViewById(R.id.text_view_resend_timer);
         txtResend = findViewById(R.id.text_view_resend);
 
         phoneNumber = getIntent().getExtras().getString("phone");
@@ -83,6 +87,13 @@ public class LoginOtpActivity extends AppCompatActivity {
                 String code = code1 + code2 + code3 + code4 + code5 + code6;
                 PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(mVerificationId, code);
                 signInWithPhoneAuthCredential(phoneAuthCredential);
+            }
+        });
+
+        txtResend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendOtp(phoneNumber, true);
             }
         });
     }
@@ -190,8 +201,33 @@ public class LoginOtpActivity extends AppCompatActivity {
         }
     }
 
+    private void startResendTimer() {
+        txtResendTimer.setVisibility(View.VISIBLE);
+        txtResend.setVisibility(View.GONE);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                timeoutSeconds--;
+                txtResendTimer.setText("Resend OTP in " + timeoutSeconds + " seconds");
+                if (timeoutSeconds <= 0) {
+                    timer.cancel();
+                    timeoutSeconds = 60L;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtResendTimer.setVisibility(View.GONE);
+                            txtResend.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            }
+        }, 0, 1000);
+    }
+
     // https://firebase.google.com/docs/auth/android/phone-auth
     private void sendOtp(String phoneNumber, boolean isResend) {
+        startResendTimer();
         setInProgress(true);
 
         PhoneAuthOptions.Builder builder =

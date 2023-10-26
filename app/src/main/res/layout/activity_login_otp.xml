@@ -214,12 +214,21 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/text_view_resend"
+        android:id="@+id/text_view_resend_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Resend OTP in 30 seconds"
         android:textColor="@color/black"
+        android:layout_weight="10"/>
+    <TextView
+        android:id="@+id/text_view_resend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="RESENT OTP"
+        android:textStyle="bold"
+        android:textColor="@color/md_theme_light_secondary"
         android:layout_weight="10"/>
 
 </LinearLayout>
