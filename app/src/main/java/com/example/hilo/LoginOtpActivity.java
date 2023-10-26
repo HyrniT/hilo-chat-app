@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginOtpActivity extends AppCompatActivity {
     private String phoneNumber;
-    private EditText txtLoginOtp;
-    private Button btnNext;
+    private EditText inputCode1, inputCode2, inputCode3, inputCode4, inputCode5, inputCode6;
+    private Button btnVerify;
     private ProgressBar pgbLogin;
     private TextView txtResend;
 
@@ -45,8 +47,16 @@ public class LoginOtpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_otp);
 
-        txtLoginOtp = findViewById(R.id.edittext_login_otp);
-        btnNext = findViewById(R.id.button_login_next);
+        inputCode1 = findViewById(R.id.inputCode1);
+        inputCode2 = findViewById(R.id.inputCode2);
+        inputCode3 = findViewById(R.id.inputCode3);
+        inputCode4 = findViewById(R.id.inputCode4);
+        inputCode5 = findViewById(R.id.inputCode5);
+        inputCode6 = findViewById(R.id.inputCode6);
+
+        setUpOtpInput();
+
+        btnVerify = findViewById(R.id.button_login_verify);
         pgbLogin = findViewById(R.id.progress_bar_login);
         txtResend = findViewById(R.id.text_view_resend);
 
@@ -56,13 +66,106 @@ public class LoginOtpActivity extends AppCompatActivity {
         sendOtp(phoneNumber, false);
     }
 
+    private void setUpOtpInput() {
+        inputCode1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    inputCode2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputCode2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    inputCode3.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputCode3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    inputCode4.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputCode4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    inputCode5.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        inputCode5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    inputCode6.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     private void setInProgress(boolean inProgress) {
         if (inProgress) {
             pgbLogin.setVisibility(View.VISIBLE);
-            btnNext.setVisibility(View.GONE);
+            btnVerify.setVisibility(View.GONE);
         } else {
             pgbLogin.setVisibility(View.GONE);
-            btnNext.setVisibility(View.VISIBLE);
+            btnVerify.setVisibility(View.VISIBLE);
         }
     }
 
