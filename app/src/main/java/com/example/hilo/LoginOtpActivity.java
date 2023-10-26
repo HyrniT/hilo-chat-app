@@ -3,6 +3,7 @@ package com.example.hilo;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -64,6 +65,26 @@ public class LoginOtpActivity extends AppCompatActivity {
         AndroidUtil.showToast(getApplicationContext(), phoneNumber);
 
         sendOtp(phoneNumber, false);
+
+        btnVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String code1 = inputCode1.getText().toString().trim();
+                String code2 = inputCode2.getText().toString().trim();
+                String code3 = inputCode3.getText().toString().trim();
+                String code4 = inputCode4.getText().toString().trim();
+                String code5 = inputCode5.getText().toString().trim();
+                String code6 = inputCode6.getText().toString().trim();
+                if (code1.isEmpty() || code2.isEmpty() || code3.isEmpty()
+                 || code5.isEmpty() || code5.isEmpty() || code6.isEmpty()) {
+                    AndroidUtil.showToast(LoginOtpActivity.this, "Please enter full code");
+                    return;
+                }
+                String code = code1 + code2 + code3 + code4 + code5 + code6;
+                PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(mVerificationId, code);
+                signInWithPhoneAuthCredential(phoneAuthCredential);
+            }
+        });
     }
 
     private void setUpOtpInput() {
@@ -239,6 +260,7 @@ public class LoginOtpActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        setInProgress(true);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -247,13 +269,18 @@ public class LoginOtpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             // Log.d(TAG, "signInWithCredential:success");
 
-                            FirebaseUser user = task.getResult().getUser();
-                            // Update UI
+                            // FirebaseUser user = task.getResult().getUser();
+
+                            Intent intent = new Intent(LoginOtpActivity.this, LoginUsernameActivity.class);
+                            intent.putExtra("phone", phoneNumber);
+                            startActivity(intent);
                         } else {
                             // Sign in failed, display a message and update the UI
                             // Log.w(TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
+                                AndroidUtil.showToast(LoginOtpActivity.this, "The verification code entered was invalid");
+                                setInProgress(false);
                             }
                         }
                     }
