@@ -38,8 +38,6 @@ public class LoginOtpActivity extends AppCompatActivity {
     private Button btnVerify;
     private ProgressBar pgbLogin;
     private TextView txtResendTimer, txtResend;
-
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Long timeoutSeconds = 60L;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -202,7 +200,7 @@ public class LoginOtpActivity extends AppCompatActivity {
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         setInProgress(true);
-        mAuth.signInWithCredential(credential)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
