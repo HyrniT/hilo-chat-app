@@ -34,7 +34,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         btnLetMeIn = findViewById(R.id.button_login_let_me_in);
         pgbLogin = findViewById(R.id.progress_bar_login);
 
-        phoneNumber = getIntent().getExtras().getString("phone");
+        phoneNumber = getIntent().getStringExtra("phone");
         getUsername();
 
         btnLetMeIn.setOnClickListener(new View.OnClickListener() {
