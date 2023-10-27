@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginOtpActivity extends AppCompatActivity {
     private String phoneNumber;
-    private EditText inputCode1, inputCode2, inputCode3, inputCode4, inputCode5, inputCode6;
+    private EditText[] inputCode = new EditText[6];
     private Button btnVerify;
     private ProgressBar pgbLogin;
     private TextView txtResendTimer, txtResend;
@@ -50,12 +49,12 @@ public class LoginOtpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_otp);
 
-        inputCode1 = findViewById(R.id.inputCode1);
-        inputCode2 = findViewById(R.id.inputCode2);
-        inputCode3 = findViewById(R.id.inputCode3);
-        inputCode4 = findViewById(R.id.inputCode4);
-        inputCode5 = findViewById(R.id.inputCode5);
-        inputCode6 = findViewById(R.id.inputCode6);
+        inputCode[0] = findViewById(R.id.inputCode1);
+        inputCode[1] = findViewById(R.id.inputCode2);
+        inputCode[2] = findViewById(R.id.inputCode3);
+        inputCode[3] = findViewById(R.id.inputCode4);
+        inputCode[4] = findViewById(R.id.inputCode5);
+        inputCode[5] = findViewById(R.id.inputCode6);
 
         setUpOtpInput();
 
@@ -65,7 +64,7 @@ public class LoginOtpActivity extends AppCompatActivity {
         txtResendTimer = findViewById(R.id.text_view_resend_timer);
         txtResend = findViewById(R.id.text_view_resend);
 
-        phoneNumber = getIntent().getExtras().getString("phone");
+        phoneNumber = getIntent().getStringExtra("phone");
         AndroidUtil.showToast(getApplicationContext(), phoneNumber);
 
         sendOtp(phoneNumber, false);
@@ -73,20 +72,17 @@ public class LoginOtpActivity extends AppCompatActivity {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String code1 = inputCode1.getText().toString().trim();
-                String code2 = inputCode2.getText().toString().trim();
-                String code3 = inputCode3.getText().toString().trim();
-                String code4 = inputCode4.getText().toString().trim();
-                String code5 = inputCode5.getText().toString().trim();
-                String code6 = inputCode6.getText().toString().trim();
-                if (code1.isEmpty() || code2.isEmpty() || code3.isEmpty()
-                 || code5.isEmpty() || code5.isEmpty() || code6.isEmpty()) {
-                    AndroidUtil.showToast(LoginOtpActivity.this, "Please enter full code");
-                    return;
+                StringBuilder code = new StringBuilder();
+                for (EditText editText : inputCode) {
+                    code.append(editText.getText().toString().trim());
                 }
-                String code = code1 + code2 + code3 + code4 + code5 + code6;
-                PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(mVerificationId, code);
-                signInWithPhoneAuthCredential(phoneAuthCredential);
+
+                if (code.toString().length() != 6) {
+                    AndroidUtil.showToast(LoginOtpActivity.this, "Please enter full code");
+                } else {
+                    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(mVerificationId, code.toString());
+                    signInWithPhoneAuthCredential(phoneAuthCredential);
+                }
             }
         });
 
@@ -99,96 +95,25 @@ public class LoginOtpActivity extends AppCompatActivity {
     }
 
     private void setUpOtpInput() {
-        inputCode1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().trim().isEmpty()) {
-                    inputCode2.requestFocus();
+        for (int i = 0; i < inputCode.length; i++) {
+            final int index = i;
+            inputCode[i].addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        inputCode2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().trim().isEmpty()) {
-                    inputCode3.requestFocus();
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.toString().trim().length() == 1 && index < 5) {
+                        inputCode[index + 1].requestFocus();
+                    }
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        inputCode3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().trim().isEmpty()) {
-                    inputCode4.requestFocus();
+                @Override
+                public void afterTextChanged(Editable s) {
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        inputCode4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().trim().isEmpty()) {
-                    inputCode5.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        inputCode5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().trim().isEmpty()) {
-                    inputCode6.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+            });
+        }
     }
 
     private void setInProgress(boolean inProgress) {
@@ -239,31 +164,18 @@ public class LoginOtpActivity extends AppCompatActivity {
                         .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                // This callback will be invoked in two situations:
-                                // 1 - Instant verification. In some cases the phone number can be instantly
-                                //     verified without needing to send or enter a verification code.
-                                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-                                //     detect the incoming verification SMS and perform verification without
-                                //     user action.
-
-                                // Log.d(TAG, "onVerificationCompleted:" + phoneAuthCredential);
-
                                 signInWithPhoneAuthCredential(phoneAuthCredential);
                                 setInProgress(false);
                             }
 
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
-                                // This callback is invoked in an invalid request for verification is made,
-                                // for instance if the the phone number format is not valid.
-                                //  Log.w(TAG, "onVerificationFailed", e);
-
                                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                                    // Invalid request
+                                    AndroidUtil.showToast(getApplicationContext(), "Invalid request");
                                 } else if (e instanceof FirebaseTooManyRequestsException) {
-                                    // The SMS quota for the project has been exceeded
+                                    AndroidUtil.showToast(getApplicationContext(), "SMS quota exceeded");
                                 } else if (e instanceof FirebaseAuthMissingActivityForRecaptchaException) {
-                                    // reCAPTCHA verification attempted with null Activity
+                                    AndroidUtil.showToast(getApplicationContext(), "reCAPTCHA verification failed");
                                 }
 
                                 AndroidUtil.showToast(getApplicationContext(), "OTP verification failed");
@@ -273,26 +185,19 @@ public class LoginOtpActivity extends AppCompatActivity {
                             @Override
                             public void onCodeSent(@NonNull String verificationId,
                                                    @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                                // The SMS verification code has been sent to the provided phone number, we
-                                // now need to ask the user to enter the code and then construct a credential
-                                // by combining the code with a verification ID.
-                                // Log.d(TAG, "onCodeSent:" + verificationId);
-                                super.onCodeSent(verificationId, token);
-
-                                // Save verification ID and resending token so we can use them later
                                 mVerificationId = verificationId;
                                 mResendToken = token;
 
                                 AndroidUtil.showToast(getApplicationContext(), "OTP sent successfully");
                                 setInProgress(false);
                             }
-                        });          // OnVerificationStateChangedCallbacks
+                        });
 
         if (isResend) {
-            PhoneAuthProvider.verifyPhoneNumber(builder.setForceResendingToken(mResendToken).build());
-        } else {
-            PhoneAuthProvider.verifyPhoneNumber(builder.build());
+            builder.setForceResendingToken(mResendToken);
         }
+
+        PhoneAuthProvider.verifyPhoneNumber(builder.build());
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -302,22 +207,14 @@ public class LoginOtpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            // Log.d(TAG, "signInWithCredential:success");
-
-                            // FirebaseUser user = task.getResult().getUser();
-
                             Intent intent = new Intent(LoginOtpActivity.this, LoginUsernameActivity.class);
                             intent.putExtra("phone", phoneNumber);
                             startActivity(intent);
                         } else {
-                            // Sign in failed, display a message and update the UI
-                            // Log.w(TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
                                 AndroidUtil.showToast(LoginOtpActivity.this, "The verification code entered was invalid");
-                                setInProgress(false);
                             }
+                            setInProgress(false);
                         }
                     }
                 });
