@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,22 +96,42 @@ public class LoginOtpActivity extends AppCompatActivity {
     private void setUpOtpInput() {
         for (int i = 0; i < inputCode.length; i++) {
             final int index = i;
-            inputCode[i].addTextChangedListener(new TextWatcher() {
+            inputCode[index].addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (s.toString().trim().length() == 1 && index < 5) {
-                        inputCode[index + 1].requestFocus();
-                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    if (s.toString().trim().isEmpty()) {
+                        if (index > 0) {
+                            inputCode[index - 1].requestFocus();
+                        }
+                    } else {
+                        if (index < inputCode.length - 1) {
+                            inputCode[index + 1].requestFocus();
+                        }
+                    }
                 }
             });
+            if (index > 0) {
+                inputCode[index].setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                            if (inputCode[index].getText().toString().isEmpty()) {
+                                inputCode[index - 1].requestFocus();
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
+            }
         }
     }
 
