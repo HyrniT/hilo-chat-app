@@ -12,4 +12,8 @@ public class FirebaseUtil {
     public static DocumentReference currentUserDetails() {
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
+
+    public static boolean isLoggedIn() {
+        return currentUserId() != null;
+    }
 }
