@@ -43,6 +43,7 @@
 
         <EditText
             android:id="@+id/txtSearch"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_rounded_corner"
@@ -70,6 +71,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layoutSearch"
-        android:padding="10dp"/>
+        android:paddingHorizontal="10dp"/>
 
 </RelativeLayout>
