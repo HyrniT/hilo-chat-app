@@ -57,7 +57,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
 
     private void getUsername() {
         setInProgress(true);
-        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        FirebaseUtil.getCurrentUserReference().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 setInProgress(false);
@@ -84,10 +84,10 @@ public class LoginUsernameActivity extends AppCompatActivity {
         if (userModel != null) {
             userModel.setUsername(username);
         } else {
-            userModel = new UserModel(phoneNumber, username, Timestamp.now(), FirebaseUtil.currentUserId());
+            userModel = new UserModel(phoneNumber, username, Timestamp.now(), FirebaseUtil.getCurrentUserId());
         }
 
-        FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseUtil.getCurrentUserReference().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 setInProgress(false);

@@ -11,7 +11,6 @@ import com.example.hilo.adapter.SearchUserRecyclerAdapter;
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class SearchUserActivity extends AppCompatActivity {
@@ -54,7 +53,7 @@ public class SearchUserActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerViewSearch(String inputSearch) {
-        Query query = FirebaseUtil.allUserCollection()
+        Query query = FirebaseUtil.getUsersCollection()
                 .whereGreaterThanOrEqualTo("username", inputSearch);
 
         FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()

@@ -31,7 +31,7 @@ public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<UserMode
             holder.txtUsername.setText(model.getUsername());
             holder.txtPhone.setText(model.getPhone());
 
-            String currentUserId = FirebaseUtil.currentUserId();
+            String currentUserId = FirebaseUtil.getCurrentUserId();
             if (currentUserId != null && model.getUserId() != null) {
                 if (model.getUserId().equals(currentUserId)) {
                     holder.txtUsername.setText(model.getUsername() + " (Me)");

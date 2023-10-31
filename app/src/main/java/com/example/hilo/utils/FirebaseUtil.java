@@ -6,19 +6,31 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseUtil {
-    public static String currentUserId() {
+    public static String getCurrentUserId() {
         return FirebaseAuth.getInstance().getUid();
     }
 
-    public static DocumentReference currentUserDetails() {
-        return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
+    public static DocumentReference getCurrentUserReference() {
+        return FirebaseFirestore.getInstance().collection("users").document(getCurrentUserId());
     }
 
-    public static CollectionReference allUserCollection() {
+    public static CollectionReference getUsersCollection() {
         return FirebaseFirestore.getInstance().collection("users");
     }
 
     public static boolean isLoggedIn() {
-        return currentUserId() != null;
+        return getCurrentUserId() != null;
+    }
+
+    public static DocumentReference getChatroomReference(String chatroomId) {
+        return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
+    }
+
+    public static String getChatroomId(String userId1, String userId2) {
+        if (userId1.hashCode() < userId2.hashCode()) {
+            return userId1 + "_" + userId2;
+        } else {
+            return userId2 + "_" + userId1;
+        }
     }
 }
