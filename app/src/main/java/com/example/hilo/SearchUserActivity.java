@@ -3,12 +3,10 @@ package com.example.hilo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import com.example.hilo.adapter.SearchUserRecyclerAdapter;
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.FirebaseUtil;
@@ -59,29 +57,18 @@ public class SearchUserActivity extends AppCompatActivity {
         Query query = FirebaseUtil.allUserCollection()
                 .whereGreaterThanOrEqualTo("username", inputSearch);
 
-        FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<UserModel>()
+        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
                 .setQuery(query, UserModel.class).build();
 
-        adapter = new SearchUserRecyclerAdapter(options, getApplicationContext());
-        recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewSearch.setAdapter(adapter);
+        if (adapter == null) {
+            adapter = new SearchUserRecyclerAdapter(options, this);
+            recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewSearch.setAdapter(adapter);
+        } else {
+            adapter.updateOptions(options);
+        }
+
         adapter.startListening();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (adapter != null) {
-            adapter.startListening();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (adapter != null) {
-            adapter.startListening();
-        }
     }
 
     @Override
