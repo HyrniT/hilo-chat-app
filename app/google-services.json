@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "490791309200",
+    "project_id": "hilo-backend",
+    "storage_bucket": "hilo-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490791309200:android:aa0e9e75e23650bd76ed15",
+        "android_client_info": {
+          "package_name": "com.example.hilo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Si8NqouoFBfnmDNGFaLNuNQmswAJ8oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
