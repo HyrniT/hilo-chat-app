@@ -1,11 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment"
-    android:background="@color/black">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_margin="20dp">
 
+    <ImageView
+        android:id="@+id/imvAvatar"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:background="@drawable/circular_background"
+        android:backgroundTint="@color/md_theme_light_surfaceVariant"
+        android:src="@drawable/person_icon"
+        android:padding="10dp"
+        android:layout_marginBottom="40dp"/>
 
+    <EditText
+        android:id="@+id/txtUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="Username"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_rounded_corner"
+        android:elevation="3dp"/>
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/txtPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="Phone"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_rounded_corner"
+        android:enabled="false"
+        android:elevation="3dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="UPDATE PROFILE"
+            android:backgroundTint="@color/md_theme_light_primary"/>
+
+        <ProgressBar
+            android:id="@+id/pgbLogin"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@color/md_theme_light_primary"
+            android:progressTint="@color/md_theme_light_primary" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textSize="16sp"
+        android:textColor="@color/md_theme_light_error"/>
+
+</LinearLayout>
