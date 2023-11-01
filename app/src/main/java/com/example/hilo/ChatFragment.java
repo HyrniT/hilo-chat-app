@@ -2,13 +2,25 @@ package com.example.hilo;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.hilo.adapter.ChatroomRecyclerAdapter;
+import com.example.hilo.adapter.SearchUserRecyclerAdapter;
+import com.example.hilo.model.ChatroomModel;
+import com.example.hilo.utils.FirebaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
+
 public class ChatFragment extends Fragment {
+    private RecyclerView recyclerViewChatroom;
+    private ChatroomRecyclerAdapter adapter;
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -17,6 +29,27 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        View view =  inflater.inflate(R.layout.fragment_chat, container, false);
+        recyclerViewChatroom = view.findViewById(R.id.recyclerViewChatroom);
+
+        setUpRecyclerViewChatroom();
+
+        return view;
     }
+
+    private void setUpRecyclerViewChatroom() {
+        Query query = FirebaseUtil.getChatroomsCollection()
+                .whereArrayContains("userIds", FirebaseUtil.getCurrentUserId())
+                .orderBy("lastSentMessageTimestamp", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<ChatroomModel> options = new FirestoreRecyclerOptions.Builder<ChatroomModel>()
+                .setQuery(query, ChatroomModel.class).build();
+
+        adapter = new ChatroomRecyclerAdapter(options, getContext());
+        recyclerViewChatroom.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewChatroom.setAdapter(adapter);
+        adapter.startListening();
+    }
+
+
 }
