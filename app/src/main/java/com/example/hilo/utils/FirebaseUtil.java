@@ -4,6 +4,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -54,5 +56,21 @@ public class FirebaseUtil {
         } else {
             return getUsersCollection().document(userIds.get(0));
         }
+    }
+
+    public static StorageReference getCurrentUserAvatarReference() {
+        return FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("avatar")
+                .child(FirebaseUtil.getCurrentUserId());
+    }
+
+    public static StorageReference getOtherUserAvatarReference(String otherUserId) {
+        return FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("avatar")
+                .child(otherUserId);
     }
 }

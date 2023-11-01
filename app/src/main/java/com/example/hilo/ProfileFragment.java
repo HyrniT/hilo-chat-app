@@ -29,6 +29,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.UploadTask;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -59,6 +60,7 @@ public class ProfileFragment extends Fragment {
                             Intent data = result.getData();
                             if (data != null && data.getData() != null) {
                                 selectedImageUri = data.getData();
+                                AndroidUtil.setUriToImageView(getContext(), selectedImageUri, imvAvatar);
                             }
                         }
                     }
@@ -91,7 +93,19 @@ public class ProfileFragment extends Fragment {
                 }
 
                 currentUserModel.setUsername(newUsername);
-                updateToFirebase();
+
+                if (selectedImageUri != null) {
+                    FirebaseUtil.getCurrentUserAvatarReference().putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                updateToFirebase();
+                            }
+                        }
+                    });
+                } else {
+                    updateToFirebase();
+                }
             }
         });
 
@@ -127,6 +141,17 @@ public class ProfileFragment extends Fragment {
 
     private void getUserData() {
         setInProgress(true);
+
+        FirebaseUtil.getCurrentUserAvatarReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri uri = task.getResult();
+                    AndroidUtil.setUriToImageView(getContext(), uri, imvAvatar);
+                }
+            }
+        });
+
         FirebaseUtil.getCurrentUserReference().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

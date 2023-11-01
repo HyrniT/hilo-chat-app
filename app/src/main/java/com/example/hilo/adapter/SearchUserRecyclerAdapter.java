@@ -2,6 +2,7 @@ package com.example.hilo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<UserModel, SearchUserRecyclerAdapter.UserModelViewHolder> {
     private Context context;
@@ -37,6 +40,16 @@ public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<UserMode
                     holder.txtUsername.setText(model.getUsername() + " (Me)");
                 }
             }
+
+            FirebaseUtil.getOtherUserAvatarReference(model.getUserId()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri uri = task.getResult();
+                        AndroidUtil.setUriToImageView(context, uri, holder.imvAvatar);
+                    }
+                }
+            });
 
             if (context != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -2,6 +2,7 @@ package com.example.hilo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,17 @@ public class ChatroomRecyclerAdapter extends FirestoreRecyclerAdapter<ChatroomMo
                             if (task.isSuccessful()) {
                                 boolean isLastMessageSentByMe = model.getLastMessageSenderId().equals(FirebaseUtil.getCurrentUserId());
                                 UserModel otherUserModel = task.getResult().toObject(UserModel.class);
+
+                                FirebaseUtil.getOtherUserAvatarReference(otherUserModel.getUserId()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+                                            Uri uri = task.getResult();
+                                            AndroidUtil.setUriToImageView(context, uri, holder.imvAvatar);
+                                        }
+                                    }
+                                });
+
                                 holder.txtUsername.setText(otherUserModel.getUsername());
                                 if (isLastMessageSentByMe) {
                                     holder.txtLastMessage.setText("You: " + model.getLastMessage());

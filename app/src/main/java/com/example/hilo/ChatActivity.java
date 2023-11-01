@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hilo.adapter.MessageRecyclerAdapter;
@@ -30,12 +32,13 @@ import java.util.Arrays;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private UserModel otherUser;
+    private UserModel otherUserModel;
     private ChatroomModel chatroomModel;
     private EditText txtChat;
     private TextView txtUsername;
     private ImageButton btnSend, btnBack;
     private RecyclerView recyclerViewMessage;
+    private ImageView imvAvatar;
     private String currentUserId, otherUserId, chatroomId;
     private MessageRecyclerAdapter adapter;
 
@@ -44,18 +47,29 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        otherUser = AndroidUtil.getUserModel(getIntent());
+        otherUserModel = AndroidUtil.getUserModel(getIntent());
         currentUserId = FirebaseUtil.getCurrentUserId();
-        otherUserId = otherUser.getUserId();
+        otherUserId = otherUserModel.getUserId();
         chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUserId);
 
         txtChat = findViewById(R.id.txtChat);
         txtUsername = findViewById(R.id.txtUsername);
         btnSend = findViewById(R.id.btnSend);
         recyclerViewMessage = findViewById(R.id.recyclerViewMessage);
+        imvAvatar = findViewById(R.id.imvAvatar);
         btnBack = findViewById(R.id.btnBack);
 
-        txtUsername.setText(otherUser.getUsername());
+        txtUsername.setText(otherUserModel.getUsername());
+
+        FirebaseUtil.getOtherUserAvatarReference(otherUserModel.getUserId()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri uri = task.getResult();
+                    AndroidUtil.setUriToImageView(ChatActivity.this, uri, imvAvatar);
+                }
+            }
+        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,8 +2,12 @@ package com.example.hilo.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.hilo.model.UserModel;
 import com.google.firebase.Timestamp;
 
@@ -30,5 +34,12 @@ public class AndroidUtil {
 
     public static String timestampToString (Timestamp timestamp) {
         return new SimpleDateFormat("HH:MM").format(timestamp.toDate());
+    }
+
+    public static void setUriToImageView(Context context, Uri imageUri, ImageView imageView) {
+        Glide.with(context)
+                .load(imageUri)
+                .apply(RequestOptions.circleCropTransform())
+                .into(imageView);
     }
 }

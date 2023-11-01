@@ -24,7 +24,7 @@
             app:tint="@color/md_theme_light_onPrimary" />
 
         <include layout="@layout/image_view_profile"
-            android:id="@+id/imvAvatar"
+            android:id="@+id/avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_toRightOf="@+id/btnBack"/>
@@ -39,7 +39,7 @@
             android:textColor="@color/md_theme_light_onPrimary"
             android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/imvAvatar"/>
+            android:layout_toRightOf="@id/avatar"/>
 
     </RelativeLayout>
 
