@@ -2,6 +2,7 @@ package com.example.hilo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -10,16 +11,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.hilo.adapter.MessageRecyclerAdapter;
+import com.example.hilo.adapter.SearchUserRecyclerAdapter;
 import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
 
@@ -30,8 +35,9 @@ public class ChatActivity extends AppCompatActivity {
     private EditText txtChat;
     private TextView txtUsername;
     private ImageButton btnSend, btnBack;
-    private RecyclerView recyclerViewChat;
+    private RecyclerView recyclerViewMessage;
     private String currentUserId, otherUserId, chatroomId;
+    private MessageRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
         txtChat = findViewById(R.id.txtChat);
         txtUsername = findViewById(R.id.txtUsername);
         btnSend = findViewById(R.id.btnSend);
-        recyclerViewChat = findViewById(R.id.recyclerViewChat);
+        recyclerViewMessage = findViewById(R.id.recyclerViewMessage);
         btnBack = findViewById(R.id.btnBack);
 
         txtUsername.setText(otherUser.getUsername());
@@ -69,10 +75,11 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        getChatroomModel();
+        setUpChatroomModel();
+        setUpMessageRecyclerView();
     }
 
-    private void getChatroomModel() {
+    private void setUpChatroomModel() {
         FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -103,6 +110,33 @@ public class ChatActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     txtChat.setText("");
                 }
+            }
+        });
+    }
+
+    private void setUpMessageRecyclerView() {
+        Query query = FirebaseUtil.getChatroomMessageReference(chatroomId)
+                .orderBy("sentTimestamp", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
+                .setQuery(query, MessageModel.class).build();
+
+        if (adapter == null) {
+            adapter = new MessageRecyclerAdapter(options, getApplicationContext());
+            LinearLayoutManager manager = new LinearLayoutManager(this);
+            manager.setReverseLayout(true);
+            recyclerViewMessage.setLayoutManager(manager);
+            recyclerViewMessage.setAdapter(adapter);
+        } else {
+            adapter.updateOptions(options);
+        }
+
+        adapter.startListening();
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                recyclerViewMessage.smoothScrollToPosition(0);
             }
         });
     }

@@ -38,17 +38,17 @@ public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<UserMode
                 }
             }
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (context != null) {
+            if (context != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         Intent intent = new Intent(context, ChatActivity.class);
                         AndroidUtil.passUserModel(intent, model);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
-                }
-            });
+                });
+            }
         }
     }
 

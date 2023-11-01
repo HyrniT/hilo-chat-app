@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/layoutLeftMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_rounded_corner"
+        android:backgroundTint="@color/md_theme_light_primaryContainer"
+        android:padding="5dp"
+        android:layout_marginEnd="80dp">
+
+        <TextView
+            android:id="@+id/txtLeftMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/md_theme_light_onPrimaryContainer"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutRightMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/edit_text_rounded_corner"
+        android:backgroundTint="@color/md_theme_light_secondaryContainer"
+        android:padding="5dp"
+        android:layout_marginStart="80dp">
+
+        <TextView
+            android:id="@+id/txtRightMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/md_theme_light_onSecondaryContainer"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
