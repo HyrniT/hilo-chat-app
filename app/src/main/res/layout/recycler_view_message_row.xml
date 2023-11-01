@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:paddingHorizontal="5dp"
             android:textColor="@color/md_theme_light_onPrimaryContainer"/>
 
     </LinearLayout>
@@ -28,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:background="@drawable/edit_text_rounded_corner"
-        android:backgroundTint="@color/md_theme_light_secondaryContainer"
+        android:backgroundTint="@color/md_theme_dark_primaryContainer"
         android:padding="5dp"
         android:layout_marginStart="80dp">
 
@@ -37,7 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textColor="@color/md_theme_light_onSecondaryContainer"/>
+            android:paddingHorizontal="5dp"
+            android:textColor="@color/md_theme_dark_onPrimaryContainer"/>
 
     </LinearLayout>
 

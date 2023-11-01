@@ -6,6 +6,6 @@
     tools:context=".ChatFragment"
     android:background="@color/white">
 
-
+    
 
 </RelativeLayout>
