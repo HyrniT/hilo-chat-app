@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.example.hilo.model.UserModel;
+import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
 
 public class AndroidUtil {
     public static void showToast(Context context, String message) {
@@ -23,5 +26,9 @@ public class AndroidUtil {
         userModel.setPhone(intent.getStringExtra("phone"));
         userModel.setUserId(intent.getStringExtra("userId"));
         return userModel;
+    }
+
+    public static String timestampToString (Timestamp timestamp) {
+        return new SimpleDateFormat("HH:MM").format(timestamp.toDate());
     }
 }
