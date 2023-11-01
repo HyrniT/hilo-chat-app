@@ -1,9 +1,16 @@
 package com.example.hilo;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -18,9 +25,13 @@ import android.widget.TextView;
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class ProfileFragment extends Fragment {
 
@@ -30,9 +41,28 @@ public class ProfileFragment extends Fragment {
     private Button btnUpdate;
     private ProgressBar pgbLogin;
     private UserModel currentUserModel;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private Uri selectedImageUri;
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null && data.getData() != null) {
+                                selectedImageUri = data.getData();
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -72,6 +102,23 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getContext(), SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+            }
+        });
+
+        imvAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.with(ProfileFragment.this)
+                        .cropSquare()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(512)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .createIntent(new Function1<Intent, Unit>() {
+                            @Override
+                            public Unit invoke(Intent intent) {
+                                imagePickerLauncher.launch(intent);
+                                return null;
+                            }
+                        });
             }
         });
 
