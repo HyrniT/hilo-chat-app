@@ -7,6 +7,7 @@ public class UserModel {
     private String username;
     private Timestamp createdTimestamp;
     private String userId;
+    private String FCMToken;
 
     public UserModel() {
     }
@@ -48,5 +49,13 @@ public class UserModel {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getFCMToken() {
+        return FCMToken;
+    }
+
+    public void setFCMToken(String FCMToken) {
+        this.FCMToken = FCMToken;
     }
 }
