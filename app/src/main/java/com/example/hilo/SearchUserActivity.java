@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import com.example.hilo.adapter.SearchUserRecyclerAdapter;
 import com.example.hilo.model.UserModel;
+import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
@@ -25,12 +26,7 @@ public class SearchUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_user);
 
-        btnBack = findViewById(R.id.btnBack);
-        btnSearch = findViewById(R.id.btnSearch);
-        txtSearch = findViewById(R.id.txtSearch);
-        recyclerViewSearch = findViewById(R.id.recyclerViewSearch);
-
-        txtSearch.requestFocus();
+        initializeViews();
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,14 +38,26 @@ public class SearchUserActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inputSearch = txtSearch.getText().toString();
-                if (inputSearch.isEmpty() || inputSearch.length() < 3) {
-                    txtSearch.setError("Invalid Username");
-                    return;
-                }
-                setUpRecyclerViewSearch(inputSearch);
+                performSearch();
             }
         });
+    }
+
+    private void initializeViews() {
+        btnBack = findViewById(R.id.btnBack);
+        btnSearch = findViewById(R.id.btnSearch);
+        txtSearch = findViewById(R.id.txtSearch);
+        recyclerViewSearch = findViewById(R.id.recyclerViewSearch);
+        txtSearch.requestFocus();
+    }
+
+    private void performSearch() {
+        String inputSearch = txtSearch.getText().toString();
+        if (inputSearch.isEmpty() || inputSearch.length() < 3) {
+            txtSearch.setError("Invalid Username");
+            return;
+        }
+        setUpRecyclerViewSearch(inputSearch);
     }
 
     private void setUpRecyclerViewSearch(String inputSearch) {
@@ -60,15 +68,12 @@ public class SearchUserActivity extends AppCompatActivity {
         FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
                 .setQuery(query, UserModel.class).build();
 
-        if (adapter == null) {
-            adapter = new SearchUserRecyclerAdapter(options, this);
-            recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
-            recyclerViewSearch.setAdapter(adapter);
-        } else {
-            adapter.updateOptions(options);
+        adapter = new SearchUserRecyclerAdapter(options, getApplicationContext());
+        if (adapter != null) {
+            adapter.startListening();
         }
-
-        adapter.startListening();
+        recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewSearch.setAdapter(adapter);
     }
 
     @Override
