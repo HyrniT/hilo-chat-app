@@ -52,7 +52,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:layout_toLeftOf="@id/btnSearch"
-            android:background="@drawable/edit_text_rounded_corner"
+            android:background="@drawable/rectangle_rounded_corner"
             android:elevation="4dp"
             android:hint="Username"
             android:inputType="text"

@@ -6,7 +6,7 @@
     android:layout_margin="5dp"
     android:elevation="5dp"
     android:orientation="horizontal"
-    android:background="@drawable/edit_text_rounded_corner">
+    android:background="@drawable/rectangle_rounded_corner">
 
     <include layout="@layout/image_view_profile"
         android:layout_width="50dp"
