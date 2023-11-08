@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
+    private ChatGptFragment chatGptFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         chatFragment = new ChatFragment();
         profileFragment = new ProfileFragment();
+        chatGptFragment = new ChatGptFragment();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.menu_profile) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.main_frame, profileFragment)
+                            .commit();
+                }
+                if (item.getItemId() == R.id.menu_chatgpt) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_frame, chatGptFragment)
                             .commit();
                 }
                 return true;
