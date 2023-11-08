@@ -20,6 +20,7 @@ public class SearchUserActivity extends AppCompatActivity {
     private EditText txtSearch;
     private RecyclerView recyclerViewSearch;
     private SearchUserRecyclerAdapter adapter;
+    private String[] bannedWords = { "chatgpt" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,12 @@ public class SearchUserActivity extends AppCompatActivity {
         if (inputSearch.isEmpty() || inputSearch.length() < 3) {
             txtSearch.setError("Invalid Username");
             return;
+        }
+
+        for (String bannedWord : bannedWords) {
+            if (inputSearch.contains(bannedWord)) {
+                return;
+            }
         }
         setUpRecyclerViewSearch(inputSearch);
     }
