@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hilo.adapter.MessageRecyclerAdapter;
-import com.example.hilo.adapter.SearchUserRecyclerAdapter;
 import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.model.UserModel;
@@ -131,7 +130,7 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
 
         MessageModel messageModel = new MessageModel(message, currentUserId, Timestamp.now());
-        FirebaseUtil.getChatroomMessageReference(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        FirebaseUtil.getChatroomMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful()) {
@@ -196,7 +195,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setUpMessageRecyclerView() {
-        Query query = FirebaseUtil.getChatroomMessageReference(chatroomId)
+        Query query = FirebaseUtil.getChatroomMessageCollection(chatroomId)
                 .orderBy("sentTimestamp", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
