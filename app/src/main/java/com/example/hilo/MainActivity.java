@@ -2,11 +2,9 @@ package com.example.hilo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -24,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnSearch;
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
-    private ChatGptFragment chatGptFragment;
+    private ChatAiFragment chatAiFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         chatFragment = new ChatFragment();
         profileFragment = new ProfileFragment();
-        chatGptFragment = new ChatGptFragment();
+        chatAiFragment = new ChatAiFragment();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (item.getItemId() == R.id.menu_chatgpt) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame, chatGptFragment)
+                            .replace(R.id.main_frame, chatAiFragment)
                             .commit();
                 }
                 return true;
