@@ -34,12 +34,24 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
     }
 
-    public static CollectionReference getChatroomMessageReference(String chatroomId) {
+    public static DocumentReference getChatroomAiReference(String chatroomId) {
+        return getCurrentUserReference().collection("chatroomAis").document(chatroomId);
+    }
+
+    public static CollectionReference getChatroomMessageCollection(String chatroomId) {
         return getChatroomReference(chatroomId).collection("messages");
+    }
+
+    public static CollectionReference getChatroomAiMessageCollection(String chatroomId) {
+        return getChatroomAiReference(chatroomId).collection("messages");
     }
 
     public static CollectionReference getChatroomsCollection() {
         return FirebaseFirestore.getInstance().collection("chatrooms");
+    }
+
+    public static CollectionReference getChatroomAisCollection() {
+        return getCurrentUserReference().collection("chatroomAis");
     }
 
     public static String getChatroomId(String userId1, String userId2) {

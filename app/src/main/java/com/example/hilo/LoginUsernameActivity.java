@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.hilo.model.ChatroomAiModel;
 import com.example.hilo.model.UserModel;
+import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +26,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
     private ProgressBar pgbLogin;
     private String phoneNumber;
     private UserModel userModel;
+    private String[] aiNames = { "ChatGPT" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         btnLetMeIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setUsername();
+                setUpUser();
             }
         });
     }
@@ -71,7 +74,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         });
     }
 
-    private void setUsername() {
+    private void setUpUser() {
         String username = txtUsername.getText().toString();
 
         if (username.isEmpty() || username.length() < 3) {
@@ -84,7 +87,22 @@ public class LoginUsernameActivity extends AppCompatActivity {
         if (userModel != null) {
             userModel.setUsername(username);
         } else {
-            userModel = new UserModel(phoneNumber, username, Timestamp.now(), FirebaseUtil.getCurrentUserId());
+            userModel = new UserModel(
+                    phoneNumber,
+                    username,
+                    Timestamp.now(),
+                    FirebaseUtil.getCurrentUserId()
+            );
+            for (String aiName : aiNames) {
+                String chatroomId = FirebaseUtil.getCurrentUserId() + "-" + aiName.toLowerCase();
+                ChatroomAiModel chatroomAiModel = new ChatroomAiModel(
+                        chatroomId,
+                        aiName,
+                        Timestamp.now(),
+                        ""
+                );
+                FirebaseUtil.getChatroomAiReference(chatroomId).set(chatroomAiModel);
+            }
         }
 
         FirebaseUtil.getCurrentUserReference().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
