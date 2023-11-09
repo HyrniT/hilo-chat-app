@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circular_background"
+        android:backgroundTint="#78AEA0"
+        android:padding="5dp"
+        android:src="@drawable/chatgpt_icon"
+        app:tint="@color/md_theme_light_onPrimary" />
+
+</RelativeLayout>
