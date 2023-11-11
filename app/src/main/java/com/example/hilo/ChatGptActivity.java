@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.example.hilo.adapter.MessageRecyclerAdapter;
 import com.example.hilo.model.ChatroomAiModel;
@@ -25,7 +24,6 @@ import com.google.firebase.firestore.Query;
 
 public class ChatGptActivity extends AppCompatActivity {
     private EditText txtChat;
-    private TextView txtWelcome;
     private ImageButton btnSend, btnBack;
     private RecyclerView recyclerViewMessage;
     private String currentUserId, chatroomId;
@@ -37,7 +35,6 @@ public class ChatGptActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_gpt);
 
         txtChat = findViewById(R.id.txtChat);
-        txtWelcome = findViewById(R.id.txtWelcome);
         btnSend = findViewById(R.id.btnSend);
         recyclerViewMessage = findViewById(R.id.recyclerViewMessage);
         btnBack = findViewById(R.id.btnBack);
