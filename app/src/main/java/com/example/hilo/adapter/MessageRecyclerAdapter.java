@@ -18,15 +18,15 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageModel, MessageRecyclerAdapter.MessageModelViewHolder> {
     private Context context;
 
-    public MessageRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options, Context context) {
+    public MessageRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options) {
         super(options);
-        this.context = context;
+
     }
 
     @NonNull
     @Override
     public MessageModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_message_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_message_row, parent, false);
         return new MessageModelViewHolder(view);
     }
 

@@ -202,7 +202,7 @@ public class ChatActivity extends AppCompatActivity {
                 .setQuery(query, MessageModel.class).build();
 
         if (adapter == null) {
-            adapter = new MessageRecyclerAdapter(options, getApplicationContext());
+            adapter = new MessageRecyclerAdapter(options);
             LinearLayoutManager manager = new LinearLayoutManager(this);
             manager.setReverseLayout(true);
             recyclerViewMessage.setLayoutManager(manager);
