@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,6 +23,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class ChatGptActivity extends AppCompatActivity {
     private EditText txtChat;
     private ImageButton btnSend, btnBack;
@@ -29,6 +44,8 @@ public class ChatGptActivity extends AppCompatActivity {
     private String currentUserId, chatroomId;
     private ChatroomAiModel chatroomAiModel;
     private MessageRecyclerAdapter adapter;
+    MediaType JSON = MediaType.get("application/json");
+    OkHttpClient client = new OkHttpClient();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +74,13 @@ public class ChatGptActivity extends AppCompatActivity {
                     return;
                 }
                 sendMessage(message);
+//                callApi(message);
+                if (message.equals("hi")) {
+                    receiveMessage("Hello! How can I assist you today?");
+                }
+                if (message.equals("bye")) {
+                    receiveMessage("Goodbye! If you ever have more questions or need assistance in the future, feel free to reach out. Take care!");
+                }
             }
         });
 
@@ -119,5 +143,66 @@ public class ChatGptActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void receiveMessage(String message) {
+        if (chatroomAiModel != null) {
+            chatroomAiModel.setLastSentMessageTimestamp(Timestamp.now());
+            chatroomAiModel.setLastMessageSenderId("chatgpt");
+            chatroomAiModel.setLastMessage(message);
+            FirebaseUtil.getChatroomAiReference(chatroomId).set(chatroomAiModel);
+
+            MessageModel messageModel = new MessageModel(message, "chatgpt", Timestamp.now());
+            FirebaseUtil.getChatroomAiMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    if (task.isSuccessful()) {
+                        txtChat.setText("");
+                    }
+                }
+            });
+        }
+    }
+
+    private void callApi(String question) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("model", "gpt-3.5-turbo-instruct");
+            jsonObject.put("prompt", question);
+            jsonObject.put("max_tokens", 7);
+            jsonObject.put("temperature", 0);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        String url = "https://api.openai.com/v1/completions";
+        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("Authorization", "Bearer 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")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                receiveMessage("Failed to load response" + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        JSONArray jsonArray = jsonObject.getJSONArray("choices");
+                        String result = jsonArray.getJSONObject(0).getString("text");
+                        receiveMessage(result.trim());
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    receiveMessage("Failed to load response: " + response.body().toString());
+                }
+            }
+        });
     }
 }
