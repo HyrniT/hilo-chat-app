@@ -41,6 +41,27 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/avatar"/>
 
+        <ImageButton
+            android:id="@+id/btnPhoneCall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/call_icon"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/md_theme_light_onPrimary"
+            android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:id="@+id/btnVideoCall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/video_icon"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/md_theme_light_onPrimary"
+            android:layout_toLeftOf="@+id/btnPhoneCall"
+            android:layout_marginLeft="5dp"/>
+
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -57,16 +78,28 @@
         android:layout_alignParentBottom="true"
         android:padding="5dp">
 
+        <ImageButton
+            android:id="@+id/btnChooseImage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/image_icon"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/md_theme_light_primary"
+            android:layout_alignParentStart="true"
+            android:layout_marginHorizontal="5dp"/>
+
         <EditText
             android:id="@+id/txtChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_toLeftOf="@+id/btnSend"
             android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toLeftOf="@+id/btnSend"
+            android:layout_toRightOf="@+id/btnChooseImage"
             android:background="@drawable/custom_edit_text"
             android:elevation="1dp"
             android:hint="Write message here"
@@ -82,8 +115,17 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/md_theme_light_primary"
-            android:layout_marginHorizontal="5dp"/>
+            android:layout_marginEnd="5dp"/>
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imvPreviewImage"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="fitCenter"/>
 
 </RelativeLayout>

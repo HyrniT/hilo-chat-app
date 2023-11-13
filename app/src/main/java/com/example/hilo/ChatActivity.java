@@ -1,10 +1,16 @@
 package com.example.hilo;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +26,7 @@ import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -32,6 +39,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Arrays;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -46,11 +55,13 @@ public class ChatActivity extends AppCompatActivity {
     private ChatroomModel chatroomModel;
     private EditText txtChat;
     private TextView txtUsername;
-    private ImageButton btnSend, btnBack;
+    private ImageButton btnSend, btnBack, btnChooseImage, btnPhoneCall, btnVideoCall;
     private RecyclerView recyclerViewMessage;
-    private ImageView imvAvatar;
+    private ImageView imvAvatar, imvPreviewImage;
     private String currentUserId, otherUserId, chatroomId;
     private MessageRecyclerAdapter adapter;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +79,25 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewMessage = findViewById(R.id.recyclerViewMessage);
         imvAvatar = findViewById(R.id.imvAvatar);
         btnBack = findViewById(R.id.btnBack);
+        btnChooseImage = findViewById(R.id.btnChooseImage);
+        btnVideoCall = findViewById(R.id.btnVideoCall);
+        btnPhoneCall = findViewById(R.id.btnPhoneCall);
+        imvPreviewImage = findViewById(R.id.imvPreviewImage);
 
         txtUsername.setText(otherUserModel.getUsername());
+
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null && data.getData() != null) {
+                        selectedImageUri = data.getData();
+                        AndroidUtil.setUriToImageViewRec(ChatActivity.this, selectedImageUri, imvPreviewImage);
+                    }
+                }
+            }
+        });
 
         FirebaseUtil.getOtherUserAvatarReference(otherUserModel.getUserId()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
@@ -92,10 +120,24 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = txtChat.getText().toString().trim();
-                if (message.isEmpty()) {
-                    return;
-                }
                 sendMessage(message);
+            }
+        });
+
+        btnChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.with(ChatActivity.this)
+                        .cropSquare()
+                        .compress(512)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .createIntent(new Function1<Intent, Unit>() {
+                            @Override
+                            public Unit invoke(Intent intent) {
+                                imagePickerLauncher.launch(intent);
+                                return null;
+                            }
+                        });
             }
         });
 
@@ -124,6 +166,36 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String message) {
+        if (selectedImageUri != null) {
+            uploadImageAndSendMessage(message);
+        } else {
+            if (message.isEmpty()) {
+                return;
+            }
+            sendText(message);
+        }
+    }
+
+    private void uploadImageAndSendMessage(String message) {
+        FirebaseUtil.uploadImage(selectedImageUri, new FirebaseUtil.OnImageUploadListener() {
+            @Override
+            public void onImageUploadSuccess(String imageUrl) {
+                if (message.isEmpty()) {
+                    sendImage(imageUrl);
+                } else {
+                    sendImage(imageUrl);
+                    sendText(message);
+                }
+            }
+
+            @Override
+            public void onImageUploadFailure(Exception e) {
+                AndroidUtil.showToast(ChatActivity.this, e.getMessage());
+            }
+        });
+    }
+
+    private void sendText(String message) {
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);
         chatroomModel.setLastMessage(message);
@@ -136,6 +208,27 @@ public class ChatActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     txtChat.setText("");
                     sendNotification(message);
+                }
+            }
+        });
+    }
+
+    private void sendImage(String imageUrl) {
+        MessageModel messageModel = new MessageModel(null, currentUserId, Timestamp.now(), imageUrl);
+
+        chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
+        chatroomModel.setLastMessageSenderId(currentUserId);
+        FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+
+        FirebaseUtil.getChatroomMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    txtChat.setText("");
+                    sendNotification("Sent a photo");
+
+                    selectedImageUri = null;
+                    AndroidUtil.setUriToImageViewRec(ChatActivity.this, null, imvPreviewImage);
                 }
             }
         });
@@ -202,7 +295,7 @@ public class ChatActivity extends AppCompatActivity {
                 .setQuery(query, MessageModel.class).build();
 
         if (adapter == null) {
-            adapter = new MessageRecyclerAdapter(options);
+            adapter = new MessageRecyclerAdapter(options, getApplicationContext());
             LinearLayoutManager manager = new LinearLayoutManager(this);
             manager.setReverseLayout(true);
             recyclerViewMessage.setLayoutManager(manager);

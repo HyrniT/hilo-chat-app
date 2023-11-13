@@ -44,4 +44,10 @@ public class AndroidUtil {
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }
+
+    public static void setUriToImageViewRec(Context context, Uri imageUri, ImageView imageView) {
+        Glide.with(context)
+                .load(imageUri)
+                .into(imageView);
+    }
 }

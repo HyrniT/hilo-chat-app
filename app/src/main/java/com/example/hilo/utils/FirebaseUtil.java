@@ -1,11 +1,24 @@
 package com.example.hilo.utils;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
+
+import androidx.annotation.NonNull;
+
+import com.example.hilo.ChatActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
 
@@ -85,4 +98,45 @@ public class FirebaseUtil {
                 .child("avatar")
                 .child(otherUserId);
     }
+
+    public interface OnImageUploadListener {
+        void onImageUploadSuccess(String imageUrl);
+
+        void onImageUploadFailure(Exception e);
+    }
+
+    public static void uploadImage(Uri imageUri, OnImageUploadListener listener) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
+        String imageName = "image_" + System.currentTimeMillis();
+        StorageReference imageReference = storageReference.child(imageName);
+
+        imageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String imageUrl = uri.toString();
+                        listener.onImageUploadSuccess(imageUrl);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onImageUploadFailure(e);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onImageUploadFailure(e);
+            }
+        });
+    }
+
+//    private static String getFileExtension(Context context, Uri uri) {
+//        ContentResolver contentResolver = context.getContentResolver();
+//        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+//        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+//    }
 }

@@ -6,6 +6,7 @@ public class MessageModel {
     private String message;
     private String senderId;
     private Timestamp sentTimestamp;
+    private String imageUrl;
 
     public MessageModel() {
     }
@@ -14,6 +15,13 @@ public class MessageModel {
         this.message = message;
         this.senderId = senderId;
         this.sentTimestamp = sentTimestamp;
+    }
+
+    public MessageModel(String message, String senderId, Timestamp sentTimestamp, String imageUrl) {
+        this.message = message;
+        this.senderId = senderId;
+        this.sentTimestamp = sentTimestamp;
+        this.imageUrl = imageUrl;
     }
 
     public String getMessage() {
@@ -38,5 +46,13 @@ public class MessageModel {
 
     public void setSentTimestamp(Timestamp sentTimestamp) {
         this.sentTimestamp = sentTimestamp;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

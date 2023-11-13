@@ -107,7 +107,7 @@ public class ChatGptActivity extends AppCompatActivity {
                 .setQuery(query, MessageModel.class).build();
 
         if (adapter == null) {
-            adapter = new MessageRecyclerAdapter(options);
+            adapter = new MessageRecyclerAdapter(options, getApplicationContext());
             LinearLayoutManager manager = new LinearLayoutManager(this);
             manager.setReverseLayout(true);
             recyclerViewMessage.setLayoutManager(manager);
