@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
                     String token = task.getResult();
-                    FirebaseUtil.getCurrentUserReference().update("FCMToken", token);
+                    FirebaseUtil.getCurrentUserReference().update("fcmtoken", token);
                 }
             }
         });
