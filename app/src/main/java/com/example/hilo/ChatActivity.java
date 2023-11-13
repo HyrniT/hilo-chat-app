@@ -218,6 +218,7 @@ public class ChatActivity extends AppCompatActivity {
 
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);
+        chatroomModel.setLastMessage("Sent a photo");
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
 
         FirebaseUtil.getChatroomMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
