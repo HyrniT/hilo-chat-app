@@ -369,9 +369,9 @@ public class ChatActivity extends AppCompatActivity {
         ZegoUIKitPrebuiltCallInvitationService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        ZegoUIKitPrebuiltCallInvitationService.unInit();
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZegoUIKitPrebuiltCallInvitationService.unInit();
+    }
 }
