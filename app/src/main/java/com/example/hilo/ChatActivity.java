@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,14 +33,14 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.zegocloud.uikit.prebuilt.call.config.ZegoNotificationConfig;
-import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
-import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationService;
+import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton;
+import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -55,24 +54,24 @@ import okhttp3.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private UserModel currentUserModel, otherUserModel;
+    private UserModel otherUserModel;
     private ChatroomModel chatroomModel;
     private EditText txtChat;
     private TextView txtUsername;
-    private ImageButton btnSend, btnBack, btnChooseImage, btnPhoneCall, btnVideoCall;
+    private ImageButton btnSend, btnBack, btnChooseImage;
     private RecyclerView recyclerViewMessage;
     private ImageView imvAvatar, imvPreviewImage;
-    private String currentUsername, currentUserId, otherUserId, chatroomId;
+    private String currentUserId, otherUserId, chatroomId;
     private MessageRecyclerAdapter adapter;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private Uri selectedImageUri;
+    private ZegoSendCallInvitationButton btnPhoneCall, btnVideoCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        getCurrentUsername();
         otherUserModel = AndroidUtil.getUserModel(getIntent());
         currentUserId = FirebaseUtil.getCurrentUserId();
         otherUserId = otherUserModel.getUserId();
@@ -90,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         imvPreviewImage = findViewById(R.id.imvPreviewImage);
 
         txtUsername.setText(otherUserModel.getUsername());
+
 
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -146,23 +146,10 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        btnPhoneCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // CODE HERE
-            }
-        });
-
-        btnVideoCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // CODE HERE
-            }
-        });
-
         setUpChatroomModel();
         setUpMessageRecyclerView();
-        startZeroCloudService();
+        setUpPhoneCall();
+        setUpVideoCall();
     }
 
     private void setUpChatroomModel() {
@@ -335,40 +322,15 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void getCurrentUsername() {
-        FirebaseUtil.getCurrentUserReference().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    currentUserModel = task.getResult().toObject(UserModel.class);
-                    currentUsername = currentUserModel.getUsername();
-//                    AndroidUtil.showToast(ChatActivity.this, currentUsername);
-                }
-            }
-        });
+    private void setUpPhoneCall() {
+        btnPhoneCall.setIsVideoCall(false);
+        btnPhoneCall.setResourceID("zego_uikit_call");
+        btnPhoneCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(otherUserId, otherUserModel.getUsername())));
     }
 
-    private void startZeroCloudService() {
-        Application application = getApplication();
-        long appID = BuildConfig.ZEGO_APP_ID;
-        String appSign = BuildConfig.ZEGO_APP_SIGN;
-        String userID = currentUserId;
-        String userName = currentUsername;
-
-        AndroidUtil.showToast(this, appSign);
-
-        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-        callInvitationConfig.notifyWhenAppRunningInBackgroundOrQuit = true;
-        ZegoNotificationConfig notificationConfig = new ZegoNotificationConfig();
-        notificationConfig.sound = "zego_uikit_sound_call";
-        notificationConfig.channelID = "CallInvitation";
-        notificationConfig.channelName = "CallInvitation";
-        ZegoUIKitPrebuiltCallInvitationService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+    private void setUpVideoCall() {
+        btnVideoCall.setIsVideoCall(true);
+        btnVideoCall.setResourceID("zego_uikit_call");
+        btnVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(otherUserId, otherUserModel.getUsername())));
     }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        ZegoUIKitPrebuiltCallInvitationService.unInit();
-//    }
 }
