@@ -41,26 +41,22 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/avatar"/>
 
-        <ImageButton
+        <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
             android:id="@+id/btnPhoneCall"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/call_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/md_theme_light_onPrimary"
+            android:backgroundTint="@color/md_theme_light_onPrimary"
             android:layout_alignParentEnd="true" />
 
-        <ImageButton
+        <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
             android:id="@+id/btnVideoCall"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/video_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/md_theme_light_onPrimary"
+            android:backgroundTint="@color/md_theme_light_onPrimary"
             android:layout_toLeftOf="@+id/btnPhoneCall"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginRight="10dp"/>
 
     </RelativeLayout>
 
