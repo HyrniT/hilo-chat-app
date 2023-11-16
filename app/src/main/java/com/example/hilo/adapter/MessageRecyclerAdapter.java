@@ -42,6 +42,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 holder.txtRightMessage.setText(model.getMessage());
                 if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
                     holder.imgRightMessage.setVisibility(View.VISIBLE);
+                    holder.layoutRightMessage.setBackgroundResource(0);
                     AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
                 } else {
                     holder.imgRightMessage.setVisibility(View.GONE);
@@ -52,6 +53,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 holder.txtLeftMessage.setText(model.getMessage());
                 if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
                     holder.imgLeftMessage.setVisibility(View.VISIBLE);
+                    holder.layoutLeftMessage.setBackgroundResource(0);
                     AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
                 } else {
                     holder.imgLeftMessage.setVisibility(View.GONE);
