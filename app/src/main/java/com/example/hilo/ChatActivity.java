@@ -133,7 +133,6 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ImagePicker.with(ChatActivity.this)
-                        .cropSquare()
                         .compress(512)			//Final image size will be less than 1 MB(Optional)
                         .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
                         .createIntent(new Function1<Intent, Unit>() {
@@ -148,8 +147,7 @@ public class ChatActivity extends AppCompatActivity {
 
         setUpChatroomModel();
         setUpMessageRecyclerView();
-        setUpPhoneCall();
-        setUpVideoCall();
+        setUpCall();
     }
 
     private void setUpChatroomModel() {
@@ -322,13 +320,11 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpPhoneCall() {
+    private void setUpCall() {
         btnPhoneCall.setIsVideoCall(false);
         btnPhoneCall.setResourceID("zego_uikit_call");
         btnPhoneCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(otherUserId, otherUserModel.getUsername())));
-    }
 
-    private void setUpVideoCall() {
         btnVideoCall.setIsVideoCall(true);
         btnVideoCall.setResourceID("zego_uikit_call");
         btnVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(otherUserId, otherUserModel.getUsername())));
