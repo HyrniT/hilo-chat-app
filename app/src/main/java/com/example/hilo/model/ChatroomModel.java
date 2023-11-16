@@ -10,15 +10,17 @@ public class ChatroomModel {
     private Timestamp lastSentMessageTimestamp;
     private String lastMessageSenderId;
     private String lastMessage;
+    private Boolean isRead;
 
     public ChatroomModel() {
     }
 
-    public ChatroomModel(String chatroomId, List<String> userIds, Timestamp lastSentMessageTimestamp, String lastSentMessageId) {
+    public ChatroomModel(String chatroomId, List<String> userIds, Timestamp lastSentMessageTimestamp, String lastSentMessageId, Boolean isRead) {
         this.chatroomId = chatroomId;
         this.userIds = userIds;
         this.lastSentMessageTimestamp = lastSentMessageTimestamp;
         this.lastMessageSenderId = lastSentMessageId;
+        this.isRead = isRead;
     }
 
     public String getChatroomId() {
@@ -59,5 +61,13 @@ public class ChatroomModel {
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
+    }
+
+    public Boolean getRead() {
+        return isRead;
+    }
+
+    public void setRead(Boolean read) {
+        isRead = read;
     }
 }

@@ -2,13 +2,16 @@ package com.example.hilo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hilo.ChatActivity;
@@ -40,6 +43,7 @@ public class ChatroomRecyclerAdapter extends FirestoreRecyclerAdapter<ChatroomMo
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
                                 boolean isLastMessageSentByMe = model.getLastMessageSenderId().equals(FirebaseUtil.getCurrentUserId());
+                                boolean isRead = model.getRead();
                                 UserModel otherUserModel = task.getResult().toObject(UserModel.class);
 
                                 FirebaseUtil.getOtherUserAvatarReference(otherUserModel.getUserId()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -57,6 +61,13 @@ public class ChatroomRecyclerAdapter extends FirestoreRecyclerAdapter<ChatroomMo
                                     holder.txtLastMessage.setText("You: " + model.getLastMessage());
                                 } else {
                                     holder.txtLastMessage.setText(model.getLastMessage());
+                                    if (!isRead) {
+
+                                        GradientDrawable drawable = (GradientDrawable) holder.layout.getBackground().mutate();
+                                        int newStrokeColor = ContextCompat.getColor(context, R.color.md_theme_light_primary);
+                                        drawable.setStroke(5, newStrokeColor);
+                                        holder.layout.setBackground(drawable);
+                                    }
                                 }
                                 holder.txtLastMessageTime.setText(AndroidUtil.timestampToString(model.getLastSentMessageTimestamp()));
 
@@ -87,6 +98,7 @@ public class ChatroomRecyclerAdapter extends FirestoreRecyclerAdapter<ChatroomMo
     class ChatroomModelViewHolder extends RecyclerView.ViewHolder {
         private TextView txtUsername, txtLastMessage, txtLastMessageTime;
         private ImageView imvAvatar;
+        private LinearLayout layout;
 
         public ChatroomModelViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +106,7 @@ public class ChatroomRecyclerAdapter extends FirestoreRecyclerAdapter<ChatroomMo
             txtLastMessage = itemView.findViewById(R.id.txtLastMessage);
             txtLastMessageTime = itemView.findViewById(R.id.txtLastMessageTime);
             imvAvatar = itemView.findViewById(R.id.imvAvatar);
+            layout = itemView.findViewById(R.id.layout);
         }
     }
 }

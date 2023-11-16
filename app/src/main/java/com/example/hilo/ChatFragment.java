@@ -35,6 +35,12 @@ public class ChatFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpRecyclerViewChatroom();
+    }
+
     private void setUpRecyclerViewChatroom() {
         Query query = FirebaseUtil.getChatroomsCollection()
                 .whereArrayContains("userIds", FirebaseUtil.getCurrentUserId())
@@ -48,6 +54,4 @@ public class ChatFragment extends Fragment {
         recyclerViewChatroom.setAdapter(adapter);
         adapter.startListening();
     }
-
-
 }

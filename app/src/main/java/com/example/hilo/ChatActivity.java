@@ -161,9 +161,15 @@ public class ChatActivity extends AppCompatActivity {
                                 chatroomId,
                                 Arrays.asList(currentUserId, otherUserId),
                                 Timestamp.now(),
-                                ""
+                                "",
+                                false
                         );
                         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+                    } else {
+                        if (!chatroomModel.getLastMessageSenderId().equals(currentUserId)) {
+                            chatroomModel.setRead(true);
+                            FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+                        }
                     }
                 }
             }
@@ -204,6 +210,7 @@ public class ChatActivity extends AppCompatActivity {
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);
         chatroomModel.setLastMessage(message);
+        chatroomModel.setRead(false);
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
 
         MessageModel messageModel = new MessageModel(message, currentUserId, Timestamp.now());
@@ -224,6 +231,7 @@ public class ChatActivity extends AppCompatActivity {
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);
         chatroomModel.setLastMessage("Sent a photo");
+        chatroomModel.setRead(false);
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
 
         FirebaseUtil.getChatroomMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
