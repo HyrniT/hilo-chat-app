@@ -21,9 +21,7 @@ import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CreateGroupActivity extends AppCompatActivity {
@@ -38,7 +36,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_group);
+        setContentView(R.layout.activity_create_group);
 
         btnBack = findViewById(R.id.btnBack);
         btnSearch = findViewById(R.id.btnSearch);
