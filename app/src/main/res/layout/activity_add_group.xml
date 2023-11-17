@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddGroupActivity">
+    tools:context=".CreateGroupActivity">
 
     <RelativeLayout
         android:id="@+id/top_toolbar"
@@ -36,7 +36,7 @@
 
     </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +47,6 @@
             android:id="@+id/layoutSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/top_toolbar"
             android:layout_margin="10dp">
 
             <EditText
@@ -78,7 +77,14 @@
                 app:tint="@color/md_theme_light_primary" />
 
         </RelativeLayout>
-    </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutSearch"
+            android:paddingHorizontal="10dp"/>
+    </RelativeLayout>
+
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider"

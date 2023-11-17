@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
     private ChatAiFragment chatAiFragment;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         btnAddGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
+                Intent intent = new Intent(MainActivity.this, CreateGroupActivity.class);
+                intent.putExtra("currentUserId", currentUserId);
                 startActivity(intent);
             }
         });
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 UserModel currentUserModel = task.getResult().toObject(UserModel.class);
+                currentUserId = currentUserModel.getUserId();
 //                Application application = getApplication();
                 long appID = BuildConfig.ZEGO_APP_ID;
                 String appSign = BuildConfig.ZEGO_APP_SIGN;
