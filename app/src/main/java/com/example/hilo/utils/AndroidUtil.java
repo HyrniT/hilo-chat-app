@@ -35,7 +35,7 @@ public class AndroidUtil {
     }
 
     public static String timestampToString (Timestamp timestamp) {
-        return new SimpleDateFormat("HH:MM").format(timestamp.toDate());
+        return new SimpleDateFormat("HH:mm").format(timestamp.toDate());
     }
 
     public static void setUriToImageView(Context context, Uri imageUri, ImageView imageView) {
