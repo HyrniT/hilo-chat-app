@@ -87,16 +87,16 @@ public class SearchUserGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Use
 
         public void bind(UserModel model) {
             userId = model.getUserId();
-            cbUser.setChecked(CreateGroupActivity.selectedUserMap.containsKey(userId));
+            cbUser.setChecked(CreateGroupActivity.selectedUserIds.contains(userId));
             cbUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     UserModelViewHolder.this.isChecked = isChecked;
 
                     if (isChecked) {
-                        CreateGroupActivity.selectedUserMap.put(userId, true);
+                        CreateGroupActivity.selectedUserIds.add(userId);
                     } else {
-                        CreateGroupActivity.selectedUserMap.remove(userId);
+                        CreateGroupActivity.selectedUserIds.remove(userId);
                     }
                 }
             });

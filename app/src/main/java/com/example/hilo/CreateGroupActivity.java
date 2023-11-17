@@ -22,17 +22,17 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class CreateGroupActivity extends AppCompatActivity {
     private ImageButton btnBack, btnSearch;
     private EditText txtSearch;
     private RecyclerView recyclerViewSearch;
     private SearchUserGroupRecyclerAdapter adapter;
+    public static Set<String> selectedUserIds = new HashSet<>();
     private String currentUserId;
-    public static Map<String, Boolean> selectedUserMap = new HashMap<>();
 
 
     @Override
@@ -60,7 +60,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtil.showToast(CreateGroupActivity.this, selectedUserMap.toString());
+                AndroidUtil.showToast(CreateGroupActivity.this, selectedUserIds.toString());
                 performSearch();
                 hideKeyboard();
             }
@@ -115,7 +115,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             adapter.startListening();
         }
 
-        selectedUserMap.clear();
+        selectedUserIds.clear();
     }
 
     private void renewRecyclerViewSearch() {
