@@ -24,7 +24,7 @@ import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationS
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
-    private ImageButton btnSearch;
+    private ImageButton btnSearch, btnAddGroup;
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
     private ChatAiFragment chatAiFragment;
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         btnSearch = findViewById(R.id.btnSearch);
+        btnAddGroup = findViewById(R.id.btnAddGroup);
 
         chatFragment = new ChatFragment();
         profileFragment = new ProfileFragment();
@@ -68,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SearchUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAddGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
                 startActivity(intent);
             }
         });
