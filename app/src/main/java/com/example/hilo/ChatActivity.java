@@ -58,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatroomModel chatroomModel;
     private EditText txtChat;
     private TextView txtUsername;
-    private ImageButton btnSend, btnBack, btnChooseImage;
+    private ImageButton btnSend, btnBack, btnChooseImage, btnClosePreview;
     private RecyclerView recyclerViewMessage;
     private ImageView imvAvatar, imvPreviewImage;
     private String currentUserId, otherUserId, chatroomId;
@@ -87,6 +87,10 @@ public class ChatActivity extends AppCompatActivity {
         btnVideoCall = findViewById(R.id.btnVideoCall);
         btnPhoneCall = findViewById(R.id.btnPhoneCall);
         imvPreviewImage = findViewById(R.id.imvPreviewImage);
+        btnClosePreview = findViewById(R.id.btnClosePreview);
+
+        imvPreviewImage.setVisibility(View.GONE);
+        btnClosePreview.setVisibility(View.GONE);
 
         txtUsername.setText(otherUserModel.getUsername());
 
@@ -99,6 +103,8 @@ public class ChatActivity extends AppCompatActivity {
                     if (data != null && data.getData() != null) {
                         selectedImageUri = data.getData();
                         AndroidUtil.setUriToImageViewRec(ChatActivity.this, selectedImageUri, imvPreviewImage);
+                        imvPreviewImage.setVisibility(View.VISIBLE);
+                        btnClosePreview.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -142,6 +148,16 @@ public class ChatActivity extends AppCompatActivity {
                                 return null;
                             }
                         });
+            }
+        });
+
+        btnClosePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedImageUri = null;
+                AndroidUtil.setUriToImageViewRec(ChatActivity.this, null, imvPreviewImage);
+                imvPreviewImage.setVisibility(View.GONE);
+                btnClosePreview.setVisibility(View.GONE);
             }
         });
 
@@ -243,6 +259,8 @@ public class ChatActivity extends AppCompatActivity {
 
                     selectedImageUri = null;
                     AndroidUtil.setUriToImageViewRec(ChatActivity.this, null, imvPreviewImage);
+                    imvPreviewImage.setVisibility(View.GONE);
+                    btnClosePreview.setVisibility(View.GONE);
                 }
             }
         });

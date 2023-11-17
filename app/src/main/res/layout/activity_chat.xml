@@ -115,13 +115,29 @@
 
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imvPreviewImage"
+    <LinearLayout
+        android:id="@+id/imagePreviewContainer"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_layout"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:scaleType="fitCenter"/>
+        android:orientation="vertical"
+        android:padding="5dp">
 
+        <ImageButton
+            android:id="@+id/btnClosePreview"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/close_icon"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_gravity="end"
+            android:padding="5dp"
+            app:tint="@color/black"/>
+
+        <ImageView
+            android:id="@+id/imvPreviewImage"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"/>
+    </LinearLayout>
 </RelativeLayout>
