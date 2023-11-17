@@ -126,13 +126,14 @@
 
         <ImageButton
             android:id="@+id/btnClosePreview"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:src="@drawable/close_icon"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/circular_background"
+            android:backgroundTint="@color/md_theme_light_primaryContainer"
             android:layout_gravity="end"
-            android:padding="5dp"
-            app:tint="@color/black"/>
+            app:tint="@color/md_theme_light_onPrimaryContainer"
+            android:layout_marginBottom="5dp"/>
 
         <ImageView
             android:id="@+id/imvPreviewImage"
