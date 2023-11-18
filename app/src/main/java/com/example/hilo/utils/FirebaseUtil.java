@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,6 +48,10 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
     }
 
+    public static DocumentReference getGroupReference(String chatroomId) {
+        return FirebaseFirestore.getInstance().collection("groups").document(chatroomId);
+    }
+
     public static DocumentReference getChatroomAiReference(String chatroomId) {
         return getCurrentUserReference().collection("chatroomAis").document(chatroomId);
     }
@@ -55,12 +60,20 @@ public class FirebaseUtil {
         return getChatroomReference(chatroomId).collection("messages");
     }
 
+    public static CollectionReference getGroupMessageCollection(String chatroomId) {
+        return getGroupReference(chatroomId).collection("messages");
+    }
+
     public static CollectionReference getChatroomAiMessageCollection(String chatroomId) {
         return getChatroomAiReference(chatroomId).collection("messages");
     }
 
     public static CollectionReference getChatroomsCollection() {
         return FirebaseFirestore.getInstance().collection("chatrooms");
+    }
+
+    public static CollectionReference getGroupsCollection() {
+        return FirebaseFirestore.getInstance().collection("groups");
     }
 
     public static CollectionReference getChatroomAisCollection() {
@@ -97,6 +110,14 @@ public class FirebaseUtil {
                 .getReference()
                 .child("avatar")
                 .child(otherUserId);
+    }
+
+    public static StorageReference getGroupAvatarReference(String groupId) {
+        return FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("avatar")
+                .child(groupId);
     }
 
     public interface OnImageUploadListener {
