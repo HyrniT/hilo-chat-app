@@ -98,6 +98,8 @@ public class SearchUserGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Use
                     } else {
                         CreateGroupActivity.selectedUserIds.remove(userId);
                     }
+
+                    CreateGroupActivity.txtCountSelected.setText(String.valueOf(CreateGroupActivity.selectedUserIds.size()));
                 }
             });
         }

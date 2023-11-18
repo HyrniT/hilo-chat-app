@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.hilo.adapter.SearchUserGroupRecyclerAdapter;
 import com.example.hilo.model.UserModel;
@@ -25,8 +27,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CreateGroupActivity extends AppCompatActivity {
-    private ImageButton btnBack, btnSearch;
-    private EditText txtSearch;
+    private ImageButton btnBack, btnSearch, btnCreate;
+    private EditText txtSearch, txtGroupName;
+    private ImageView imvAvatar;
+    public static TextView txtCountSelected;
     private RecyclerView recyclerViewSearch;
     private SearchUserGroupRecyclerAdapter adapter;
     public static Set<String> selectedUserIds = new HashSet<>();
@@ -41,6 +45,10 @@ public class CreateGroupActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnSearch = findViewById(R.id.btnSearch);
         txtSearch = findViewById(R.id.txtSearch);
+        txtGroupName = findViewById(R.id.txtGroupName);
+        imvAvatar = findViewById(R.id.imvAvatar);
+        btnCreate = findViewById(R.id.btnCreate);
+        txtCountSelected = findViewById(R.id.txtCountSelected);
         recyclerViewSearch = findViewById(R.id.recyclerViewSearch);
 
         Intent intent = getIntent();
@@ -58,7 +66,6 @@ public class CreateGroupActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtil.showToast(CreateGroupActivity.this, selectedUserIds.toString());
                 performSearch();
                 hideKeyboard();
             }
