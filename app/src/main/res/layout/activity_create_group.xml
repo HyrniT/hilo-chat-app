@@ -61,8 +61,7 @@
             android:background="@drawable/circular_background"
             android:backgroundTint="@color/md_theme_light_surfaceVariant"
             android:padding="10dp"
-            android:src="@drawable/ic_camera"
-            app:tint="@color/md_theme_light_onPrimaryContainer" />
+            android:src="@drawable/ic_camera" />
 
         <LinearLayout
             android:id="@+id/containerTitle1"
