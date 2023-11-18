@@ -3,22 +3,19 @@ package com.example.hilo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.hilo.adapter.ChatroomRecyclerAdapter;
-import com.example.hilo.model.ChatroomModel;
-import com.example.hilo.utils.FirebaseUtil;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.Query;
+import com.google.android.material.tabs.TabLayout;
 
 public class ChatFragment extends Fragment {
-    private RecyclerView recyclerViewChatroom;
-    private ChatroomRecyclerAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager2;
+    private ViewPagerChatAdapter adapter;
+
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -28,30 +25,38 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_chat, container, false);
-        recyclerViewChatroom = view.findViewById(R.id.recyclerViewChatroom);
 
-        setUpRecyclerViewChatroom();
+        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager2 = view.findViewById(R.id.viewPager2);
+
+        adapter = new ViewPagerChatAdapter(requireActivity());
+        viewPager2.setAdapter(adapter);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager2.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                tabLayout.getTabAt(position).select();
+            }
+        });
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setUpRecyclerViewChatroom();
-    }
-
-    private void setUpRecyclerViewChatroom() {
-        Query query = FirebaseUtil.getChatroomsCollection()
-                .whereArrayContains("userIds", FirebaseUtil.getCurrentUserId())
-                .orderBy("lastSentMessageTimestamp", Query.Direction.DESCENDING);
-
-        FirestoreRecyclerOptions<ChatroomModel> options = new FirestoreRecyclerOptions.Builder<ChatroomModel>()
-                .setQuery(query, ChatroomModel.class).build();
-
-        adapter = new ChatroomRecyclerAdapter(options, getContext());
-        recyclerViewChatroom.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewChatroom.setAdapter(adapter);
-        adapter.startListening();
     }
 }
