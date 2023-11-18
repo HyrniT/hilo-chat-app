@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:src="@drawable/launcher_icon" />
+            android:src="@drawable/logo_launcher" />
 
         <TextView
             android:layout_width="wrap_content"

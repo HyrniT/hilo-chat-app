@@ -71,7 +71,7 @@
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/person_icon"
+        android:src="@drawable/ic_person"
         app:tint="@color/md_theme_light_primary"
         android:layout_weight="20"/>
 

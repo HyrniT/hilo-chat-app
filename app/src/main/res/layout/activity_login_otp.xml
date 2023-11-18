@@ -70,7 +70,7 @@
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/otp_icon"
+        android:src="@drawable/ic_otp"
         app:tint="@color/md_theme_light_primary"
         android:layout_weight="20"/>
 

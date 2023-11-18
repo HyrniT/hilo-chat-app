@@ -12,7 +12,7 @@
         android:background="@drawable/circular_background"
         android:backgroundTint="#78AEA0"
         android:padding="5dp"
-        android:src="@drawable/chatgpt_icon"
+        android:src="@drawable/ic_chatgpt"
         app:tint="@color/md_theme_light_onPrimary" />
 
 </RelativeLayout>

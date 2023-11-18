@@ -14,7 +14,7 @@
         android:layout_height="160dp"
         android:background="@drawable/circular_background"
         android:backgroundTint="@color/md_theme_light_surfaceVariant"
-        android:src="@drawable/person_icon"
+        android:src="@drawable/ic_person"
         android:padding="10dp"
         android:layout_marginBottom="40dp"/>
 
