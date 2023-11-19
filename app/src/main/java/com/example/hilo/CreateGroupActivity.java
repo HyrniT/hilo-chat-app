@@ -207,7 +207,8 @@ public class CreateGroupActivity extends AppCompatActivity {
                                 groupName,
                                 userCreatedId,
                                 new ArrayList<>(selectedUserIds),
-                                Timestamp.now()
+                                Timestamp.now(),
+                                ""
                         );
                         updateToFirebase(groupId);
                         if (selectedImageUri != null) {

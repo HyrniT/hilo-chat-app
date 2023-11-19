@@ -16,12 +16,13 @@ public class GroupModel {
     public GroupModel() {
     }
 
-    public GroupModel(String groupId, String groupName, String userCreatedId, List<String> userIds, Timestamp lastSentMessageTimestamp) {
+    public GroupModel(String groupId, String groupName, String userCreatedId, List<String> userIds, Timestamp lastSentMessageTimestamp, String lastMessageSenderId) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.userCreatedId = userCreatedId;
         this.userIds = userIds;
         this.lastSentMessageTimestamp = lastSentMessageTimestamp;
+        this.lastMessageSenderId = lastMessageSenderId;
     }
 
     public String getGroupId() {
