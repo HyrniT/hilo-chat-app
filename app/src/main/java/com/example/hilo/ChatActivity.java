@@ -243,7 +243,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendImage(String imageUrl) {
-        MessageModel messageModel = new MessageModel(null, currentUserId, Timestamp.now(), imageUrl);
+        MessageModel messageModel = new MessageModel(currentUserId, Timestamp.now(), imageUrl);
 
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);

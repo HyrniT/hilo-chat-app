@@ -12,20 +12,27 @@ public class MessageModel {
     public MessageModel() {
     }
 
+    public MessageModel(String senderId, Timestamp sentTimestamp) {
+        this(null, senderId, null, sentTimestamp, null);
+    }
+
     public MessageModel(String message, String senderId, Timestamp sentTimestamp) {
-        this.message = message;
-        this.senderId = senderId;
-        this.sentTimestamp = sentTimestamp;
+        this(message, senderId, null, sentTimestamp, null);
     }
 
-    public MessageModel(String message, String senderId, Timestamp sentTimestamp, String imageUrl) {
-        this.message = message;
-        this.senderId = senderId;
-        this.sentTimestamp = sentTimestamp;
-        this.imageUrl = imageUrl;
+    public MessageModel(String senderId, Timestamp sentTimestamp, String imageUrl) {
+        this(null, senderId, null, sentTimestamp, imageUrl);
     }
 
-    public MessageModel(String message, String senderId, String senderName, Timestamp sentTimestamp, String imageUrl) {
+    public MessageModel(String message, String senderId, String senderName, Timestamp sentTimestamp) {
+        this(message, senderId, senderName, sentTimestamp, null);
+    }
+
+    public MessageModel(String senderId, String senderName, Timestamp sentTimestamp, String imageUrl) {
+        this(null, senderId, senderName, sentTimestamp, imageUrl);
+    }
+
+    private MessageModel(String message, String senderId, String senderName, Timestamp sentTimestamp, String imageUrl) {
         this.message = message;
         this.senderId = senderId;
         this.senderName = senderName;
