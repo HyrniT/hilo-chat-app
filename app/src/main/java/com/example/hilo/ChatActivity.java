@@ -178,7 +178,7 @@ public class ChatActivity extends AppCompatActivity {
                                 Arrays.asList(currentUserId, otherUserId),
                                 Timestamp.now(),
                                 "",
-                                false
+                                true
                         );
                         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
                     } else {
