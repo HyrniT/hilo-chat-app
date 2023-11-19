@@ -220,11 +220,12 @@ public class CreateGroupActivity extends AppCompatActivity {
                                 }
                             });
                         }
+                        selectedUserIds.clear();
                     }
                 }
             }
         });
-        selectedUserIds.clear();
+
         Intent intent = new Intent(CreateGroupActivity.this, MainActivity.class);
         startActivity(intent);
     }
