@@ -38,7 +38,7 @@ public class ContactFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        renewRecyclerViewChatroom();
+        adapter.notifyDataSetChanged();
     }
 
     private void setUpRecyclerViewChatroom() {
@@ -53,9 +53,5 @@ public class ContactFragment extends Fragment {
         recyclerViewChatroom.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewChatroom.setAdapter(adapter);
         adapter.startListening();
-    }
-
-    private void renewRecyclerViewChatroom() {
-        adapter.notifyDataSetChanged();
     }
 }
