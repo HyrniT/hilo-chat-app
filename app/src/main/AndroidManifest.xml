@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Hilo"
         tools:targetApi="31">
         <activity
+            android:name=".ChatGroupActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateGroupActivity"
             android:exported="false" />
         <activity
