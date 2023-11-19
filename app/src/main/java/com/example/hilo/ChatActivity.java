@@ -116,6 +116,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Uri uri = task.getResult();
                     AndroidUtil.setUriToImageView(ChatActivity.this, uri, imvAvatar);
+                    imvAvatar.setPadding(5, 5, 5, 5);
                 }
             }
         });
