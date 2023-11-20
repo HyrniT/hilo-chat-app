@@ -78,6 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="OTP Verification"
+        android:fontFamily="@font/nunito_extrabold"
         android:letterSpacing="0.08"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -201,6 +202,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="VERIFY"
+            android:fontFamily="@font/nunito_semibold"
+            android:textSize="16sp"
             android:backgroundTint="@color/md_theme_light_primary"/>
 
         <ProgressBar
@@ -219,6 +222,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Resend OTP in 30 seconds"
+        android:fontFamily="@font/nunito_semibold"
         android:textColor="@color/black"
         android:layout_weight="10"/>
     <TextView
@@ -227,6 +231,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="RESENT OTP"
+        android:fontFamily="@font/nunito_bold"
         android:textStyle="bold"
         android:textColor="@color/md_theme_light_secondary"
         android:layout_weight="10"/>

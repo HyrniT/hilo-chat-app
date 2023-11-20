@@ -25,8 +25,8 @@
 
         <include layout="@layout/image_view_profile"
             android:id="@+id/avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_toRightOf="@+id/btnBack"/>
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Username"
-            android:fontFamily="@font/baloo"
+            android:fontFamily="@font/nunito_extrabold"
             android:textSize="22sp"
             android:textColor="@color/md_theme_light_onPrimary"
             android:layout_marginStart="10dp"

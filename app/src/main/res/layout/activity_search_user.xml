@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Search User"
-            android:fontFamily="@font/baloo"
+            android:fontFamily="@font/nunito_extrabold"
             android:textSize="22sp"
             android:textColor="@color/md_theme_light_onPrimary"
             android:layout_marginStart="10dp"
@@ -55,6 +55,7 @@
             android:background="@drawable/rectangle_rounded_corner"
             android:elevation="4dp"
             android:hint="Username"
+            android:fontFamily="@font/nunito_semibold"
             android:inputType="text"
             android:padding="10dp" />
 

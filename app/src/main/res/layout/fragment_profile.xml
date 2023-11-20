@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:hint="Username"
+        android:fontFamily="@font/nunito_semibold"
         android:inputType="text"
         android:layout_margin="10dp"
         android:background="@drawable/rectangle_rounded_corner"
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:hint="Phone"
+        android:fontFamily="@font/nunito_semibold"
         android:inputType="text"
         android:layout_margin="10dp"
         android:background="@drawable/rectangle_rounded_corner"
@@ -53,6 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="UPDATE PROFILE"
+            android:fontFamily="@font/nunito_semibold"
+            android:textSize="16sp"
             android:backgroundTint="@color/md_theme_light_primary"/>
 
         <ProgressBar
@@ -70,6 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logout"
+        android:fontFamily="@font/nunito_extrabold"
         android:textSize="16sp"
         android:textColor="@color/md_theme_light_error"/>
 

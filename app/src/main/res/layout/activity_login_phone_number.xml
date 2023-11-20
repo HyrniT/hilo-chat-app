@@ -81,6 +81,7 @@
         android:text="Enter mobile number"
         android:layout_gravity="center_vertical"
         android:letterSpacing="0.08"
+        android:fontFamily="@font/nunito_extrabold"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_weight="10"/>
@@ -107,6 +108,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:hint="Mobile"
+            android:fontFamily="@font/nunito_semibold"
             android:inputType="phone"
             android:layout_margin="10dp"
             android:background="@drawable/rectangle_rounded_corner"
@@ -126,6 +128,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SEND OTP"
+            android:fontFamily="@font/nunito_semibold"
+            android:textSize="16sp"
             android:backgroundTint="@color/md_theme_light_primary"/>
 
         <ProgressBar

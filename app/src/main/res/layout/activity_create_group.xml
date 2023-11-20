@@ -26,13 +26,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Group"
-            android:fontFamily="@font/baloo"
-            android:textSize="22sp"
-            android:textColor="@color/md_theme_light_onPrimary"
-            android:layout_marginStart="10dp"
             android:layout_centerInParent="true"
-            android:layout_centerVertical="true"/>
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/nunito_extrabold"
+            android:text="Create Group"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="22sp" />
 
     </RelativeLayout>
 
@@ -81,7 +80,7 @@
                 android:id="@+id/title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/baloo"
+                android:fontFamily="@font/nunito_extrabold"
                 android:textSize="22sp"
                 android:textColor="@color/md_theme_light_primary"
                 android:text="Group name" />
@@ -91,6 +90,7 @@
             android:id="@+id/txtGroupName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
@@ -130,7 +130,7 @@
                 android:id="@+id/title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/baloo"
+                android:fontFamily="@font/nunito_extrabold"
                 android:textSize="22sp"
                 android:textColor="@color/md_theme_light_primary"
                 android:text="Add members" />
