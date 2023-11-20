@@ -12,7 +12,7 @@
         android:text=""
         android:fontFamily="@font/nunito_extralight"
         android:textSize="12sp"
-        android:textColor="@color/md_theme_light_outline"
+        android:textColor="@color/black"
         android:layout_alignParentStart="true"/>
 
     <LinearLayout

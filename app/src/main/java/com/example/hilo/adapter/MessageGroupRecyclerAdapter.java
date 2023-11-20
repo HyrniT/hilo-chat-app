@@ -42,7 +42,24 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     holder.imgRightMessage.setVisibility(View.GONE);
                 }
             } else {
-                holder.txtSenderName.setText(model.getSenderName());
+                // Khi thêm 1 tin nhắn mới vào Adapter thì có position là 0 -> tin nhắn cũ nhất có position là getItemCount() - 1
+                // Khi load dữ liệu từ Firebase, Adapter này sẽ load từ 0 đến getItemCount() - 1
+                // Kiểm tra position của tin nhắn hiện tại có phải kế cuối không
+                if (position < getItemCount() - 1) {
+                    MessageModel nextMessage = getItem(position + 1);
+                    if (nextMessage != null && nextMessage.getSenderId().equals(model.getSenderId())) {
+                        // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ cùng một người, ẩn tên người gửi
+                        holder.txtSenderName.setVisibility(View.GONE);
+                    } else {
+                        // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ các người khác nhau, hiển thị tên người gửi
+                        holder.txtSenderName.setVisibility(View.VISIBLE);
+                        holder.txtSenderName.setText(model.getSenderName());
+                    }
+                } else {
+                    // Nếu là tin nhắn cuối cùng, hiển thị tên người gửi
+                    holder.txtSenderName.setVisibility(View.VISIBLE);
+                    holder.txtSenderName.setText(model.getSenderName());
+                }
                 holder.layoutLeftMessage.setVisibility(View.VISIBLE);
                 holder.layoutRightMessage.setVisibility(View.GONE);
                 holder.txtLeftMessage.setText(model.getMessage());
@@ -80,6 +97,20 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
             txtSenderName = itemView.findViewById(R.id.txtSenderName);
             imgLeftMessage = itemView.findViewById(R.id.imgLeftMessage);
             imgRightMessage = itemView.findViewById(R.id.imgRightMessage);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getBindingAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        MessageModel selectedMessage = getItem(position);
+                        if (selectedMessage != null) {
+                            // Hiển thị index của tin nhắn được chọn bằng Toast
+                            AndroidUtil.showToast(context, String.valueOf(position));
+                        }
+                    }
+                }
+            });
         }
     }
 }
