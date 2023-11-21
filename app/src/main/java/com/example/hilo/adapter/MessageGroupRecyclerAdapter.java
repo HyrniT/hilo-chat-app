@@ -1,5 +1,7 @@
 package com.example.hilo.adapter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -127,8 +129,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     if (position != RecyclerView.NO_POSITION) {
                         MessageModel selectedMessage = getItem(position);
                         if (selectedMessage != null) {
-                            itemView.setScaleX(1.2F);
-                            itemView.setScaleY(1.2F);
+                            itemView.setPadding(20, itemView.getPaddingTop(), 20, itemView.getPaddingBottom());
                             showPopupMenu(view, selectedMessage);
                         }
                     }
@@ -142,20 +143,26 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), anchorView);
             popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
 
+            popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                @Override
+                public void onDismiss(PopupMenu menu) {
+                    itemView.setPadding(0, itemView.getPaddingTop(), 0, itemView.getPaddingBottom());
+                }
+            });
+
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    // Handle menu item click here
                     if (item.getItemId() == R.id.menu_pin) {
-                        // Handle pin action
+                        handlePin();
                     } else if (item.getItemId() == R.id.menu_delete) {
-                        // Handle delete action
+                        handleDelete();
                     } else if (item.getItemId() == R.id.menu_copy) {
-                        // Handle copy action
+                        handleCopy();
                     } else if (item.getItemId() == R.id.menu_reply) {
-                        // Handle reply action
+                        handleReply();
                     } else if (item.getItemId() == R.id.menu_forward) {
-                        // Handle forward action
+                        handleForward();
                     }
 
                     return true;
@@ -184,5 +191,26 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
 
             popupMenu.show();
         }
+
+        private void handlePin() {}
+        private void handleDelete() {}
+
+        private void handleCopy() {
+            ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboardManager != null) {
+                int position = getBindingAdapterPosition();
+                MessageModel selectedMessage = getItem(position);
+                if (selectedMessage != null) {
+                    String messageText = selectedMessage.getMessage();
+                    ClipData clipData = ClipData.newPlainText("message", messageText);
+                    clipboardManager.setPrimaryClip(clipData);
+
+                    AndroidUtil.showToast(context, "Copied");
+                }
+            }
+        }
+
+        private void handleReply() {}
+        private void handleForward() {}
     }
 }
