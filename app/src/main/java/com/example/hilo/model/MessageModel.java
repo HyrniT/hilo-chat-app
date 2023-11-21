@@ -3,11 +3,13 @@ package com.example.hilo.model;
 import com.google.firebase.Timestamp;
 
 public class MessageModel {
+    private String messageId;
     private String message;
     private String senderId;
     private String senderName;
     private Timestamp sentTimestamp;
     private String imageUrl;
+    private Boolean isDeleted = false;
 
     public MessageModel() {
     }
@@ -30,6 +32,14 @@ public class MessageModel {
 
     public MessageModel(String senderId, String senderName, Timestamp sentTimestamp, String imageUrl) {
         this(null, senderId, senderName, sentTimestamp, imageUrl);
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     private MessageModel(String message, String senderId, String senderName, Timestamp sentTimestamp, String imageUrl) {
@@ -78,5 +88,13 @@ public class MessageModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
