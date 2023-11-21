@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -157,23 +158,8 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 menuItem.setTitle(spannable);
             }
 
-
-            // Determine the gravity and position for the popup menu
-            int[] location = new int[2];
-            anchorView.getLocationOnScreen(location);
-            int anchorViewY = location[1];
-
-            int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-            int halfScreenHeight = screenHeight / 2;
-
             if (message.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                 popupMenu.setGravity(Gravity.END);
-            } else {
-                if (anchorViewY > halfScreenHeight) {
-                    popupMenu.setGravity(Gravity.TOP);
-                } else {
-                    popupMenu.setGravity(Gravity.BOTTOM);
-                }
             }
 
             popupMenu.show();

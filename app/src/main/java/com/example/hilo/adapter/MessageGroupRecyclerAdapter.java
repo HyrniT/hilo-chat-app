@@ -127,6 +127,8 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     if (position != RecyclerView.NO_POSITION) {
                         MessageModel selectedMessage = getItem(position);
                         if (selectedMessage != null) {
+                            itemView.setScaleX(1.2F);
+                            itemView.setScaleY(1.2F);
                             showPopupMenu(view, selectedMessage);
                         }
                     }
@@ -176,23 +178,8 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                 menuItem.setTitle(spannable);
             }
 
-
-            // Determine the gravity and position for the popup menu
-            int[] location = new int[2];
-            anchorView.getLocationOnScreen(location);
-            int anchorViewY = location[1];
-
-            int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-            int halfScreenHeight = screenHeight / 2;
-
             if (message.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                 popupMenu.setGravity(Gravity.END);
-            } else {
-                if (anchorViewY > halfScreenHeight) {
-                    popupMenu.setGravity(Gravity.TOP);
-                } else {
-                    popupMenu.setGravity(Gravity.BOTTOM);
-                }
             }
 
             popupMenu.show();
