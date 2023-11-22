@@ -113,6 +113,7 @@ public class ChatGroupActivity extends AppCompatActivity {
                     List<String> userIds = new ArrayList<>(groupModel.getUserIds());
                     userIds.remove(currentUserId);
                     otherUserIds = userIds;
+                    setUpMessageGroupRecyclerView();
                 }
             }
         });
@@ -184,8 +185,6 @@ public class ChatGroupActivity extends AppCompatActivity {
             }
         });
 
-        setUpMessageGroupRecyclerView();
-//        setUpCall();
     }
 
     private void sendMessage(String message) {
@@ -232,6 +231,13 @@ public class ChatGroupActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     txtChat.setText("");
 //                    sendNotification(message);
+                    DocumentReference documentReference = task.getResult();
+                    if (documentReference != null) {
+                        String messageId = documentReference.getId();
+                        messageModel.setMessageId(messageId);
+
+                        FirebaseUtil.getGroupMessageCollection(groupId).document(messageId).set(messageModel);
+                    }
                 }
             }
         });
@@ -269,7 +275,7 @@ public class ChatGroupActivity extends AppCompatActivity {
                 .setQuery(query, MessageModel.class).build();
 
         if (adapter == null) {
-            adapter = new MessageGroupRecyclerAdapter(options, getApplicationContext());
+            adapter = new MessageGroupRecyclerAdapter(options, getApplicationContext(), groupModel);
             LinearLayoutManager manager = new LinearLayoutManager(this);
             manager.setReverseLayout(true);
             recyclerViewMessage.setLayoutManager(manager);

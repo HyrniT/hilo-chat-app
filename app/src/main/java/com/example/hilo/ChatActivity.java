@@ -163,7 +163,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         setUpChatroomModel();
-        setUpMessageRecyclerView();
         setUpCall();
     }
 
@@ -188,6 +187,7 @@ public class ChatActivity extends AppCompatActivity {
                             FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
                         }
                     }
+                    setUpMessageRecyclerView();
                 }
             }
         });
@@ -237,6 +237,13 @@ public class ChatActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     txtChat.setText("");
                     sendNotification(message);
+                    DocumentReference documentReference = task.getResult();
+                    if (documentReference != null) {
+                        String messageId = documentReference.getId();
+                        messageModel.setMessageId(messageId);
+
+                        FirebaseUtil.getChatroomMessageCollection(chatroomId).document(messageId).set(messageModel);
+                    }
                 }
             }
         });
@@ -328,7 +335,7 @@ public class ChatActivity extends AppCompatActivity {
                 .setQuery(query, MessageModel.class).build();
 
         if (adapter == null) {
-            adapter = new MessageRecyclerAdapter(options, getApplicationContext());
+            adapter = new MessageRecyclerAdapter(options, getApplicationContext(), chatroomModel);
             LinearLayoutManager manager = new LinearLayoutManager(this);
             manager.setReverseLayout(true);
             recyclerViewMessage.setLayoutManager(manager);

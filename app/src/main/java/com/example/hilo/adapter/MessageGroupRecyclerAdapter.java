@@ -3,6 +3,7 @@ package com.example.hilo.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -21,26 +22,53 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hilo.R;
+import com.example.hilo.model.GroupModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 
 public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<MessageModel, MessageGroupRecyclerAdapter.MessageGroupModelViewHolder> {
     private Context context;
-    public MessageGroupRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options, Context context) {
+    private GroupModel groupModel;
+    private String currentUserId;
+
+    public MessageGroupRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options, Context context, GroupModel groupModel) {
         super(options);
         this.context = context;
+        this.groupModel = groupModel;
+        this.currentUserId = FirebaseUtil.getCurrentUserId();
     }
 
     @Override
     protected void onBindViewHolder(@NonNull MessageGroupModelViewHolder holder, int position, @NonNull MessageModel model) {
         if (model != null) {
-            if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+            if (model.getDeleted()) {
+                if (model.getSenderId().equals(currentUserId)) {
+                    holder.layoutLeftMessage.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
+                    holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
+                    holder.txtRightMessage.setText("Message deleted");
+                    holder.imgRightMessage.setVisibility(View.GONE);
+                } else {
+                    holder.layoutRightMessage.setVisibility(View.GONE);
+                    holder.txtSenderName.setVisibility(View.GONE);
+                    holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
+                    holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
+                    holder.txtLeftMessage.setText("Message deleted");
+                    holder.imgLeftMessage.setVisibility(View.GONE);
+                }
+                return;
+            }
+            if (model.getSenderId().equals(currentUserId)) {
                 holder.layoutLeftMessage.setVisibility(View.GONE);
                 holder.layoutRightMessage.setVisibility(View.VISIBLE);
                 holder.txtRightMessage.setText(model.getMessage());
@@ -48,6 +76,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     holder.imgRightMessage.setVisibility(View.VISIBLE);
                     holder.layoutRightMessage.setBackgroundResource(0);
                     holder.layoutRightMessage.setPadding(0, 0, 0, 0);
+
                     AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
                 } else {
                     holder.imgRightMessage.setVisibility(View.GONE);
@@ -61,11 +90,16 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     if (nextMessage != null && nextMessage.getSenderId().equals(model.getSenderId())) {
                         // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ cùng một người, ẩn tên người gửi
                         holder.txtSenderName.setVisibility(View.GONE);
+                        if (nextMessage.getDeleted()) {
+                            holder.txtSenderName.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ các người khác nhau, hiển thị tên người gửi
                         holder.txtSenderName.setVisibility(View.VISIBLE);
-                        holder.txtSenderName.setText(model.getSenderName());
+
                     }
+                    holder.txtSenderName.setText(model.getSenderName());
+
                 } else {
                     // Nếu là tin nhắn cuối cùng, hiển thị tên người gửi
                     holder.txtSenderName.setVisibility(View.VISIBLE);
@@ -89,7 +123,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
     @NonNull
     @Override
     public MessageGroupModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_message_group_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_message_group_row, parent, false);
         return new MessageGroupRecyclerAdapter.MessageGroupModelViewHolder(view);
     }
 
@@ -185,7 +219,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                 menuItem.setTitle(spannable);
             }
 
-            if (message.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+            if (message.getSenderId().equals(currentUserId)) {
                 popupMenu.setGravity(Gravity.END);
             }
 
@@ -193,7 +227,34 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
         }
 
         private void handlePin() {}
-        private void handleDelete() {}
+        private void handleDelete() {
+            int position = getBindingAdapterPosition();
+            MessageModel selectedMessage = getItem(position);
+
+            if (selectedMessage != null && selectedMessage.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+                String messageId = selectedMessage.getMessageId();
+                String groupId = groupModel.getGroupId();
+                selectedMessage.setDeleted(true);
+
+                FirebaseUtil.getGroupMessageCollection(groupId).document(messageId).set(selectedMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                            if (position == 0) {
+                                groupModel.setLastSentMessageTimestamp(Timestamp.now());
+                                groupModel.setLastMessage("Deleted a message");
+                                FirebaseUtil.getGroupReference(groupId).set(groupModel);
+                            }
+
+                            AndroidUtil.showToast(context, "Deleted successfully");
+                        }
+                    }
+                });
+            } else {
+                AndroidUtil.showToast(context, "Cannot delete");
+            }
+        }
 
         private void handleCopy() {
             ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);

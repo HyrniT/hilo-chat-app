@@ -3,6 +3,7 @@ package com.example.hilo.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,34 +26,62 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.hilo.R;
+import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.utils.FirebaseUtil;
 import com.example.hilo.utils.AndroidUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 
 public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageModel, MessageRecyclerAdapter.MessageModelViewHolder> {
     private Context context;
+    private ChatroomModel chatroomModel;
 
     public MessageRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options, Context context) {
         super(options);
         this.context = context;
     }
+    public MessageRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options, Context context, ChatroomModel chatroomModel) {
+        super(options);
+        this.context = context;
+        this.chatroomModel = chatroomModel;
+    }
+
 
     @NonNull
     @Override
     public MessageModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_message_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_message_row, parent, false);
         return new MessageModelViewHolder(view);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull MessageModelViewHolder holder, int position, @NonNull MessageModel model) {
         if (model != null) {
+            if (model.getDeleted()) {
+                if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+                    holder.layoutLeftMessage.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
+                    holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
+                    holder.txtRightMessage.setText("Message deleted");
+                    holder.imgRightMessage.setVisibility(View.GONE);
+                } else {
+                    holder.layoutRightMessage.setVisibility(View.GONE);
+                    holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
+                    holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
+                    holder.txtLeftMessage.setText("Message deleted");
+                    holder.imgLeftMessage.setVisibility(View.GONE);
+                }
+                return;
+            }
             if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                 holder.layoutLeftMessage.setVisibility(View.GONE);
                 holder.layoutRightMessage.setVisibility(View.VISIBLE);
                 holder.txtRightMessage.setText(model.getMessage());
+
                 if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
                     holder.imgRightMessage.setVisibility(View.VISIBLE);
                     holder.layoutRightMessage.setBackgroundResource(0);
@@ -65,6 +94,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 holder.layoutLeftMessage.setVisibility(View.VISIBLE);
                 holder.layoutRightMessage.setVisibility(View.GONE);
                 holder.txtLeftMessage.setText(model.getMessage());
+
                 if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
                     holder.imgLeftMessage.setVisibility(View.VISIBLE);
                     holder.layoutLeftMessage.setBackgroundResource(0);
@@ -176,7 +206,33 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
         }
 
         private void handlePin() {}
-        private void handleDelete() {}
+        private void handleDelete() {
+            int position = getBindingAdapterPosition();
+            MessageModel selectedMessage = getItem(position);
+            if (selectedMessage != null && selectedMessage.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+                String messageId = selectedMessage.getMessageId();
+                String chatroomId = chatroomModel.getChatroomId();
+                selectedMessage.setDeleted(true);
+
+                FirebaseUtil.getChatroomMessageCollection(chatroomId).document(messageId).set(selectedMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (position == 0) {
+                                chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
+                                chatroomModel.setLastMessage("Deleted a message");
+                                FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+                            }
+
+                            AndroidUtil.showToast(context, "Deleted successfully");
+                        }
+                    }
+                });
+            } else {
+                AndroidUtil.showToast(context, "Cannot delete");
+            }
+        }
+
 
         private void handleCopy() {
             ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
