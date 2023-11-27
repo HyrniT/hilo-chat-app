@@ -30,4 +30,8 @@
     </style>
 
     <style name="Theme.Hilo" parent="Base.Theme.Hilo" />
+    <style name="customSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/md_theme_light_primary</item>
+        <item name="colorSwitchThumbNormal">@color/md_theme_light_onPrimary</item>
+    </style>
 </resources>
