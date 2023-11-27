@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ImageButton btnSearch, btnAddGroup;
     private ChatFragment chatFragment;
-    private ProfileFragment profileFragment;
+    private SettingFragment settingFragment;
     private ChatAiFragment chatAiFragment;
     private String currentUserId;
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btnAddGroup = findViewById(R.id.btnAddGroup);
 
         chatFragment = new ChatFragment();
-        profileFragment = new ProfileFragment();
+        settingFragment = new SettingFragment();
         chatAiFragment = new ChatAiFragment();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (item.getItemId() == R.id.menu_profile) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame, profileFragment)
+                            .replace(R.id.main_frame, settingFragment)
                             .commit();
                 }
                 if (item.getItemId() == R.id.menu_chatgpt) {

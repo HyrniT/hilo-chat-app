@@ -9,7 +9,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/circular_background"
+        android:background="@drawable/circular"
         android:backgroundTint="#78AEA0"
         android:padding="5dp"
         android:src="@drawable/ic_chatgpt"

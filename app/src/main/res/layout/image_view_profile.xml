@@ -7,7 +7,7 @@
         android:id="@+id/imvAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/circular_background"
+        android:background="@drawable/circular"
         android:src="@drawable/ic_person"
         android:padding="5dp"
         android:backgroundTint="@color/md_theme_light_surfaceVariant"

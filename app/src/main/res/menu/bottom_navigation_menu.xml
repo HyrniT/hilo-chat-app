@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_chatgpt"/>
 
     <item android:id="@+id/menu_profile"
-        android:title="Profile"
-        android:icon="@drawable/ic_person"/>
+        android:title="Settings"
+        android:icon="@drawable/ic_setting"/>
 
 </menu>
