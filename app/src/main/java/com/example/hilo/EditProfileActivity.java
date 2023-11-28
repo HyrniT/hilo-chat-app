@@ -1,26 +1,22 @@
 package com.example.hilo;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.LayoutInflater;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
@@ -29,30 +25,35 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.UploadTask;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
-public class ProfileFragment extends Fragment {
-
-    private ImageView imvAvatar;
-    private EditText txtUsername, txtPhone;
-    private TextView txtLogout;
-    private Button btnUpdate;
-    private ProgressBar pgbLogin;
+public class EditProfileActivity extends AppCompatActivity {
     private UserModel currentUserModel;
-    private ActivityResultLauncher<Intent> imagePickerLauncher;
     private Uri selectedImageUri;
-
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    private EditText txtUsername, txtPhone;
+    private ImageView imvAvatar;
+    private Button btnUpdate;
+    private ImageButton btnBack;
+    private ProgressBar pgbLogin;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_profile);
+
+        txtUsername = findViewById(R.id.txtUsername);
+        txtPhone = findViewById(R.id.txtPhone);
+        imvAvatar = findViewById(R.id.imvAvatar);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        pgbLogin = findViewById(R.id.pgbLogin);
+        btnBack = findViewById(R.id.btnBack);
+
+        getUserData();
+
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -61,27 +62,11 @@ public class ProfileFragment extends Fragment {
                             Intent data = result.getData();
                             if (data != null && data.getData() != null) {
                                 selectedImageUri = data.getData();
-                                AndroidUtil.setUriToImageView(getContext(), selectedImageUri, imvAvatar);
+                                AndroidUtil.setUriToImageView(EditProfileActivity.this, selectedImageUri, imvAvatar);
                             }
                         }
                     }
                 });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        imvAvatar = view.findViewById(R.id.imvAvatar);
-        txtUsername = view.findViewById(R.id.txtUsername);
-        txtPhone = view.findViewById(R.id.txtPhone);
-        txtLogout = view.findViewById(R.id.txtLogout);
-        btnUpdate = view.findViewById(R.id.btnUpdate);
-        pgbLogin = view.findViewById(R.id.pgbLogin);
-
-        getUserData();
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,25 +95,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        txtLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        FirebaseUtil.logOut();
-                        Intent intent = new Intent(getContext(), SplashActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
-
         imvAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.with(ProfileFragment.this)
+                ImagePicker.with(EditProfileActivity.this)
                         .cropSquare()	    			//Crop image(Optional), Check Customization for more option
                         .compress(512)			//Final image size will be less than 1 MB(Optional)
                         .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
@@ -142,7 +112,12 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        return view;
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getUserData() {
@@ -153,7 +128,7 @@ public class ProfileFragment extends Fragment {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri uri = task.getResult();
-                    AndroidUtil.setUriToImageView(getContext(), uri, imvAvatar);
+                    AndroidUtil.setUriToImageView(EditProfileActivity.this, uri, imvAvatar);
                 }
             }
         });
@@ -186,9 +161,9 @@ public class ProfileFragment extends Fragment {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     setInProgress(false);
-                    AndroidUtil.showToast(getContext(), "Updated successfully");
+                    AndroidUtil.showToast(EditProfileActivity.this, "Updated successfully");
                 } else {
-                    AndroidUtil.showToast(getContext(), "Updated failed");
+                    AndroidUtil.showToast(EditProfileActivity.this, "Updated failed");
                 }
             }
         });
