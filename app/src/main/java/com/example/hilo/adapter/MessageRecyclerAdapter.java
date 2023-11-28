@@ -208,7 +208,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
         private void handlePin() {
             int position = getBindingAdapterPosition();
             MessageModel selectedMessage = getItem(position);
-            if (selectedMessage != null && !selectedMessage.getPinned()) {
+            if (selectedMessage != null && selectedMessage.getMessage() != null && !selectedMessage.getPinned()) {
                 String messageId = selectedMessage.getMessageId();
                 String chatroomId = chatroomModel.getChatroomId();
                 selectedMessage.setPinned(true);
