@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ChatInfoActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_alignParentStart="true"
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/md_theme_light_primary" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/top_toolbar"
+        android:paddingHorizontal="20dp">
+
+        <ImageView
+            android:id="@+id/imvAvatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circular"
+            android:backgroundTint="@color/md_theme_light_surfaceVariant"
+            android:src="@drawable/ic_person"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/txtUsername"
+            android:text="Username"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:textSize="22sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/txtPhone"
+            android:text="+84 123456789"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_search"
+                    android:background="@drawable/circular"
+                    android:backgroundTint="@color/md_theme_light_primaryContainer"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search\nmessages"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_brush"
+                    android:background="@drawable/circular"
+                    android:backgroundTint="@color/md_theme_light_primaryContainer"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change\ntheme"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_notification"
+                    android:background="@drawable/circular"
+                    android:backgroundTint="@color/md_theme_light_primaryContainer"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mute"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:background="@drawable/rectangle_rounded_corner"
+            android:backgroundTint="@color/md_theme_light_primaryContainer">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ic_about_us"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_pin"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:text="Pinned messages"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+                    android:layout_toEndOf="@+id/ic_about_us"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_right_arrow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ic_faq"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_image"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:text="Media file store"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+                    android:layout_toEndOf="@+id/ic_faq"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_right_arrow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:tint="@color/md_theme_light_onPrimaryContainer" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:background="@drawable/rectangle_rounded_corner"
+            android:backgroundTint="@color/md_theme_light_errorContainer">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ic_block"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_block"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_error" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:text="Block"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_theme_light_error"
+                    android:layout_toEndOf="@+id/ic_block"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ic_delete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_delete"
+                    android:padding="10dp"
+                    app:tint="@color/md_theme_light_error" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:text="Delete chat history"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_theme_light_error"
+                    android:layout_toEndOf="@+id/ic_delete"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
