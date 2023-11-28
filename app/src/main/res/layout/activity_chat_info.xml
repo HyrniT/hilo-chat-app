@@ -16,13 +16,12 @@
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_back"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/md_theme_light_primary"
-            android:contentDescription="go back"/>
+            app:tint="@color/md_theme_light_primary" />
 
     </RelativeLayout>
     <LinearLayout
@@ -89,7 +88,7 @@
                     android:layout_gravity="center"
                     android:textSize="12sp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"/>
             </LinearLayout>
 
             <LinearLayout
@@ -114,7 +113,7 @@
                     android:layout_gravity="center"
                     android:textSize="12sp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"/>
             </LinearLayout>
 
             <LinearLayout
@@ -139,7 +138,7 @@
                     android:layout_gravity="center"
                     android:textSize="12sp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:textColor="@color/md_theme_light_onPrimaryContainer"
+                    android:textColor="@color/md_theme_light_onPrimaryContainer"/>
             </LinearLayout>
 
         </LinearLayout>
