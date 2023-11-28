@@ -56,6 +56,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private UserModel otherUserModel;
     private ChatroomModel chatroomModel;
+    private String currentUsername;
     private EditText txtChat;
     private TextView txtUsername;
     private ImageButton btnSend, btnBack, btnChooseImage, btnClosePreview;
@@ -117,6 +118,15 @@ public class ChatActivity extends AppCompatActivity {
                     Uri uri = task.getResult();
                     AndroidUtil.setUriToImageView(ChatActivity.this, uri, imvAvatar);
                     imvAvatar.setPadding(5, 5, 5, 5);
+                }
+            }
+        });
+
+        FirebaseUtil.getCurrentUserReference().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    currentUsername = task.getResult().getString("username");
                 }
             }
         });
@@ -230,7 +240,7 @@ public class ChatActivity extends AppCompatActivity {
         chatroomModel.setRead(false);
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
 
-        MessageModel messageModel = new MessageModel(message, currentUserId, Timestamp.now());
+        MessageModel messageModel = new MessageModel(message, currentUserId, currentUsername, Timestamp.now());
         FirebaseUtil.getChatroomMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -250,7 +260,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendImage(String imageUrl) {
-        MessageModel messageModel = new MessageModel(currentUserId, Timestamp.now(), imageUrl);
+        MessageModel messageModel = new MessageModel(currentUserId, currentUsername, Timestamp.now(), imageUrl);
 
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);

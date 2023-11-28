@@ -10,6 +10,7 @@ public class MessageModel {
     private Timestamp sentTimestamp;
     private String imageUrl;
     private Boolean isDeleted = false;
+    private Boolean isPinned = false;
 
     public MessageModel() {
     }
@@ -96,5 +97,13 @@ public class MessageModel {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Boolean getPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(Boolean pinned) {
+        isPinned = pinned;
     }
 }

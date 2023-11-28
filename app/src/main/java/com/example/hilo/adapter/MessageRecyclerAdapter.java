@@ -205,7 +205,22 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
             popupMenu.show();
         }
 
-        private void handlePin() {}
+        private void handlePin() {
+            int position = getBindingAdapterPosition();
+            MessageModel selectedMessage = getItem(position);
+            if (selectedMessage != null && !selectedMessage.getPinned()) {
+                String messageId = selectedMessage.getMessageId();
+                String chatroomId = chatroomModel.getChatroomId();
+                selectedMessage.setPinned(true);
+
+                FirebaseUtil.getChatroomMessageCollection(chatroomId).document(messageId).set(selectedMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        AndroidUtil.showToast(context, "Pinned successfully");
+                    }
+                });
+            }
+        }
         private void handleDelete() {
             int position = getBindingAdapterPosition();
             MessageModel selectedMessage = getItem(position);
