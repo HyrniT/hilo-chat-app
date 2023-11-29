@@ -172,6 +172,18 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        txtUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChatActivity.this, ChatInfoActivity.class);
+                intent.putExtra("chatroomId", chatroomId);
+                intent.putExtra("otherUserId", otherUserModel.getUserId());
+                intent.putExtra("otherUsername", otherUserModel.getUsername());
+                intent.putExtra("otherPhone", otherUserModel.getPhone());
+                startActivity(intent);
+            }
+        });
+
         setUpChatroomModel();
         setUpCall();
     }
