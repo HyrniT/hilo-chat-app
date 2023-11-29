@@ -74,13 +74,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <ImageView
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_search"
-                    android:background="@drawable/circular"
-                    android:backgroundTint="@color/md_theme_light_primaryContainer"
+                    android:background="@drawable/circular_selectable"
                     android:padding="10dp"
                     app:tint="@color/md_theme_light_onPrimaryContainer" />
                 <TextView
@@ -99,13 +98,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="20dp">
-                <ImageView
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_brush"
-                    android:background="@drawable/circular"
-                    android:backgroundTint="@color/md_theme_light_primaryContainer"
+                    android:background="@drawable/circular_selectable"
                     android:padding="10dp"
                     app:tint="@color/md_theme_light_onPrimaryContainer" />
                 <TextView
@@ -124,13 +122,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="20dp">
-                <ImageView
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_notification"
-                    android:background="@drawable/circular"
-                    android:backgroundTint="@color/md_theme_light_primaryContainer"
+                    android:background="@drawable/circular_selectable"
                     android:padding="10dp"
                     app:tint="@color/md_theme_light_onPrimaryContainer" />
                 <TextView

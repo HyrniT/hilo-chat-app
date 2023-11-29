@@ -41,6 +41,7 @@ public class PinMessageActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         chatroomModel = task.getResult().toObject(ChatroomModel.class);
+                        setUpMessageRecyclerView();
                     }
                 }
             });
@@ -55,8 +56,6 @@ public class PinMessageActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        setUpMessageRecyclerView();
     }
 
     private void setUpMessageRecyclerView() {

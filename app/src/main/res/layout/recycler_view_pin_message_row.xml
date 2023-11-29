@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rowPinMessage"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     android:background="@drawable/rectangle_bottom_border">
 
-    <TextView
-        android:id="@+id/txtUsername"
+    <LinearLayout
+        android:id="@+id/rowPinMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Username"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/nunito_bold" />
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_toLeftOf="@+id/btnUnpin">
 
-    <TextView
-        android:id="@+id/txtMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello World"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/nunito_regular"
-        android:maxLines="1"
-        android:ellipsize="end"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/txtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/nunito_bold" />
+
+        <TextView
+            android:id="@+id/txtMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello World"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/nunito_regular"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnUnpin"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/rectangle_selectable" />
+
+</RelativeLayout>
