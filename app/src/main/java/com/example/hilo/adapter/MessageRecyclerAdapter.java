@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Spannable;
@@ -14,7 +13,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -154,7 +152,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
 
         private void showPopupMenu(View anchorView, MessageModel message) {
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), anchorView);
-            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+            popupMenu.getMenuInflater().inflate(R.menu.popup_message_menu, popupMenu.getMenu());
 
             popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
                 @Override
