@@ -20,6 +20,12 @@
         android:theme="@style/Theme.Hilo"
         tools:targetApi="31">
         <activity
+            android:name=".PhotoViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MediaStoreActivity"
+            android:exported="false" />
+        <activity
             android:name=".PinMessageActivity"
             android:exported="false" />
         <activity

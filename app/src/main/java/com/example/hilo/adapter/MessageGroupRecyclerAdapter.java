@@ -3,6 +3,7 @@ package com.example.hilo.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hilo.PhotoViewActivity;
 import com.example.hilo.R;
 import com.example.hilo.model.GroupModel;
 import com.example.hilo.model.MessageModel;
@@ -123,16 +125,18 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
     @Override
     public MessageGroupModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_message_group_row, parent, false);
-        return new MessageGroupRecyclerAdapter.MessageGroupModelViewHolder(view);
+        return new MessageGroupRecyclerAdapter.MessageGroupModelViewHolder(view, context);
     }
 
     public class MessageGroupModelViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout layoutLeftMessage, layoutRightMessage;
         private TextView txtLeftMessage, txtRightMessage, txtSenderName;
         private ImageView imgLeftMessage ,imgRightMessage;
+        private Context context;
 
-        public MessageGroupModelViewHolder(@NonNull View itemView) {
+        public MessageGroupModelViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
+            this.context = context;
 
             layoutLeftMessage = itemView.findViewById(R.id.layoutLeftMessage);
             layoutRightMessage = itemView.findViewById(R.id.layoutRightMessage);
@@ -148,8 +152,12 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         MessageModel selectedMessage = getItem(position);
-                        if (selectedMessage != null) {
-//                            AndroidUtil.showToast(context, String.valueOf(position));
+                        String imageUrl = selectedMessage.getImageUrl();
+                        if (imageUrl != null) {
+                            Intent intent = new Intent(context, PhotoViewActivity.class);
+                            intent.putExtra("imageUrl", imageUrl);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
                         }
                     }
                 }

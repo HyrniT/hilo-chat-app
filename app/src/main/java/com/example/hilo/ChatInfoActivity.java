@@ -67,7 +67,9 @@ public class ChatInfoActivity extends AppCompatActivity {
         btnMediaStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(ChatInfoActivity.this, MediaStoreActivity.class);
+                intent.putExtra("chatroomId", chatroomId);
+                startActivity(intent);
             }
         });
 
