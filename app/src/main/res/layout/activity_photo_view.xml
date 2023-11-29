@@ -17,10 +17,10 @@
 
     <ImageButton
         android:id="@+id/btnClose"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_close_big"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:layout_alignParentRight="true"
         android:background="?attr/selectableItemBackgroundBorderless"/>
 
