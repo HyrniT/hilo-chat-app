@@ -40,82 +40,92 @@ import com.google.firebase.Timestamp;
 public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<MessageModel, MessageGroupRecyclerAdapter.MessageGroupModelViewHolder> {
     private Context context;
     private GroupModel groupModel;
-    private String currentUserId;
 
     public MessageGroupRecyclerAdapter(@NonNull FirestoreRecyclerOptions<MessageModel> options, Context context, GroupModel groupModel) {
         super(options);
         this.context = context;
         this.groupModel = groupModel;
-        this.currentUserId = FirebaseUtil.getCurrentUserId();
     }
 
     @Override
     protected void onBindViewHolder(@NonNull MessageGroupModelViewHolder holder, int position, @NonNull MessageModel model) {
         if (model != null) {
+            int dp = (int) (context.getResources().getDisplayMetrics().density * 10f);
             if (model.getDeleted()) {
-                if (model.getSenderId().equals(currentUserId)) {
+                if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                     holder.layoutLeftMessage.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setVisibility(View.VISIBLE);
+                    holder.layoutRightMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
                     holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
                     holder.txtRightMessage.setText("Message deleted");
                     holder.imgRightMessage.setVisibility(View.GONE);
                 } else {
                     holder.layoutRightMessage.setVisibility(View.GONE);
+                    holder.layoutLeftMessage.setVisibility(View.VISIBLE);
                     holder.txtSenderName.setVisibility(View.GONE);
+                    holder.layoutLeftMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
                     holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
                     holder.txtLeftMessage.setText("Message deleted");
                     holder.imgLeftMessage.setVisibility(View.GONE);
                 }
-                return;
-            }
-            if (model.getSenderId().equals(currentUserId)) {
-                holder.layoutLeftMessage.setVisibility(View.GONE);
-                holder.layoutRightMessage.setVisibility(View.VISIBLE);
-                holder.txtRightMessage.setText(model.getMessage());
-                if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
-                    holder.imgRightMessage.setVisibility(View.VISIBLE);
-                    holder.layoutRightMessage.setBackgroundResource(0);
-                    holder.layoutRightMessage.setPadding(0, 0, 0, 0);
-
-                    AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
-                } else {
-                    holder.imgRightMessage.setVisibility(View.GONE);
-                }
             } else {
-                // Khi thêm 1 tin nhắn mới vào Adapter thì có position là 0 -> tin nhắn cũ nhất có position là getItemCount() - 1
-                // Khi load dữ liệu từ Firebase, Adapter này sẽ load từ 0 đến getItemCount() - 1
-                // Kiểm tra position của tin nhắn hiện tại có phải kế cuối không
-                if (position < getItemCount() - 1) {
-                    MessageModel nextMessage = getItem(position + 1);
-                    if (nextMessage != null && nextMessage.getSenderId().equals(model.getSenderId())) {
-                        // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ cùng một người, ẩn tên người gửi
-                        holder.txtSenderName.setVisibility(View.GONE);
-                        if (nextMessage.getDeleted()) {
-                            holder.txtSenderName.setVisibility(View.VISIBLE);
-                        }
+                if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+                    holder.layoutLeftMessage.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setVisibility(View.VISIBLE);
+                    holder.txtRightMessage.setText(model.getMessage());
+                    holder.layoutRightMessage.setPadding(dp, dp, dp, dp);
+                    holder.txtSenderName.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_dark_primaryContainer)));
+                    holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_dark_onPrimaryContainer));
+
+                    if (model.getImageUrl() == null) {
+                        holder.imgRightMessage.setVisibility(View.GONE);
                     } else {
-                        // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ các người khác nhau, hiển thị tên người gửi
-                        holder.txtSenderName.setVisibility(View.VISIBLE);
-
+                        holder.txtSenderName.setVisibility(View.GONE);
+                        holder.imgRightMessage.setVisibility(View.VISIBLE);
+                        holder.layoutRightMessage.setPadding(0, 0, 0, 0);
+                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
                     }
-                    holder.txtSenderName.setText(model.getSenderName());
+                } else {
+                    // Khi thêm 1 tin nhắn mới vào Adapter thì có position là 0 -> tin nhắn cũ nhất có position là getItemCount() - 1
+                    // Khi load dữ liệu từ Firebase, Adapter này sẽ load từ 0 đến getItemCount() - 1
+                    // Kiểm tra position của tin nhắn hiện tại có phải kế cuối không
+                    if (position < getItemCount() - 1) {
+                        MessageModel nextMessage = getItem(position + 1);
+                        if (nextMessage != null && nextMessage.getSenderId().equals(model.getSenderId())) {
+                            // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ cùng một người, ẩn tên người gửi
+                            holder.txtSenderName.setVisibility(View.GONE);
+                            if (nextMessage.getDeleted()) {
+                                holder.txtSenderName.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            // Nếu tin nhắn tiếp theo và tin nhắn hiện tại từ các người khác nhau, hiển thị tên người gửi
+                            holder.txtSenderName.setVisibility(View.VISIBLE);
 
-                } else {
-                    // Nếu là tin nhắn cuối cùng, hiển thị tên người gửi
-                    holder.txtSenderName.setVisibility(View.VISIBLE);
-                    holder.txtSenderName.setText(model.getSenderName());
-                }
-                holder.layoutLeftMessage.setVisibility(View.VISIBLE);
-                holder.layoutRightMessage.setVisibility(View.GONE);
-                holder.txtLeftMessage.setText(model.getMessage());
-                if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
-                    holder.imgLeftMessage.setVisibility(View.VISIBLE);
-                    holder.layoutLeftMessage.setBackgroundResource(0);
-                    holder.layoutLeftMessage.setPadding(0, 0, 0, 0);
-                    AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
-                } else {
-                    holder.imgLeftMessage.setVisibility(View.GONE);
+                        }
+                        holder.txtSenderName.setText(model.getSenderName());
+
+                    } else {
+                        // Nếu là tin nhắn cuối cùng, hiển thị tên người gửi
+                        holder.txtSenderName.setVisibility(View.VISIBLE);
+                        holder.txtSenderName.setText(model.getSenderName());
+                    }
+                    holder.layoutLeftMessage.setVisibility(View.VISIBLE);
+                    holder.layoutRightMessage.setVisibility(View.GONE);
+                    holder.txtLeftMessage.setText(model.getMessage());
+                    holder.layoutLeftMessage.setPadding(dp, dp, dp, dp);
+                    holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_primaryContainer)));
+                    holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_onPrimaryContainer));
+
+                    if (model.getImageUrl() == null) {
+                        holder.imgLeftMessage.setVisibility(View.GONE);
+                    } else {
+                        holder.imgLeftMessage.setVisibility(View.VISIBLE);
+                        holder.layoutLeftMessage.setPadding(0, 0, 0, 0);
+                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
+                    }
                 }
             }
         }
@@ -226,7 +236,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                 menuItem.setTitle(spannable);
             }
 
-            if (message.getSenderId().equals(currentUserId)) {
+            if (message.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                 popupMenu.setGravity(Gravity.END);
             }
 

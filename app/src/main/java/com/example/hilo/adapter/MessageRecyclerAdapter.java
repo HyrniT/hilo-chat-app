@@ -62,47 +62,56 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
     @Override
     protected void onBindViewHolder(@NonNull MessageModelViewHolder holder, int position, @NonNull MessageModel model) {
         if (model != null) {
+            int dp = (int) (context.getResources().getDisplayMetrics().density * 10f);
             if (model.getDeleted()) {
                 if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                     holder.layoutLeftMessage.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setVisibility(View.VISIBLE);
+                    holder.layoutRightMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
                     holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
                     holder.txtRightMessage.setText("Message deleted");
                     holder.imgRightMessage.setVisibility(View.GONE);
                 } else {
                     holder.layoutRightMessage.setVisibility(View.GONE);
+                    holder.layoutLeftMessage.setVisibility(View.VISIBLE);
+                    holder.layoutLeftMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_surfaceVariant)));
                     holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_outline));
                     holder.txtLeftMessage.setText("Message deleted");
                     holder.imgLeftMessage.setVisibility(View.GONE);
                 }
-                return;
-            }
-            if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
-                holder.layoutLeftMessage.setVisibility(View.GONE);
-                holder.layoutRightMessage.setVisibility(View.VISIBLE);
-                holder.txtRightMessage.setText(model.getMessage());
-
-                if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
-                    holder.imgRightMessage.setVisibility(View.VISIBLE);
-                    holder.layoutRightMessage.setBackgroundResource(0);
-                    holder.layoutRightMessage.setPadding(0, 0, 0, 0);
-                    AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
-                } else {
-                    holder.imgRightMessage.setVisibility(View.GONE);
-                }
             } else {
-                holder.layoutLeftMessage.setVisibility(View.VISIBLE);
-                holder.layoutRightMessage.setVisibility(View.GONE);
-                holder.txtLeftMessage.setText(model.getMessage());
+                if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
+                    holder.layoutLeftMessage.setVisibility(View.GONE);
+                    holder.layoutRightMessage.setVisibility(View.VISIBLE);
+                    holder.txtRightMessage.setText(model.getMessage());
+                    holder.layoutRightMessage.setPadding(dp, dp, dp, dp);
+                    holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_dark_primaryContainer)));
+                    holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_dark_onPrimaryContainer));
 
-                if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
-                    holder.imgLeftMessage.setVisibility(View.VISIBLE);
-                    holder.layoutLeftMessage.setBackgroundResource(0);
-                    holder.layoutLeftMessage.setPadding(0, 0, 0, 0);
-                    AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
+                    if (model.getImageUrl() == null) {
+                        holder.imgRightMessage.setVisibility(View.GONE);
+                    } else {
+                        holder.imgRightMessage.setVisibility(View.VISIBLE);
+                        holder.layoutRightMessage.setPadding(0, 0, 0, 0);
+                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
+                    }
                 } else {
-                    holder.imgLeftMessage.setVisibility(View.GONE);
+                    holder.layoutLeftMessage.setVisibility(View.VISIBLE);
+                    holder.layoutRightMessage.setVisibility(View.GONE);
+                    holder.txtLeftMessage.setText(model.getMessage());
+                    holder.layoutLeftMessage.setPadding(dp, dp, dp, dp);
+                    holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_primaryContainer)));
+                    holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_onPrimaryContainer));
+
+                    if (model.getImageUrl() == null) {
+                        holder.imgLeftMessage.setVisibility(View.GONE);
+                    } else {
+                        holder.imgLeftMessage.setVisibility(View.VISIBLE);
+                        holder.layoutLeftMessage.setPadding(0, 0, 0, 0);
+                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
+                    }
                 }
             }
         }
