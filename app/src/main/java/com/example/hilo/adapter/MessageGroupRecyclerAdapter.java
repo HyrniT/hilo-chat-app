@@ -169,7 +169,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         MessageModel selectedMessage = getItem(position);
-                        if (selectedMessage != null) {
+                        if (selectedMessage != null && selectedMessage.getMessage() != null) {
                             itemView.setPadding(20, itemView.getPaddingTop(), 20, itemView.getPaddingBottom());
                             showPopupMenu(view, selectedMessage);
                         }

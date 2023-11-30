@@ -53,7 +53,8 @@ public class MediaStoreActivity extends AppCompatActivity {
 
     private void setUpMediaRecyclerView() {
         Query query = FirebaseUtil.getChatroomMessageCollection(chatroomId)
-                .orderBy("sentTimestamp", Query.Direction.DESCENDING);
+                .orderBy("sentTimestamp", Query.Direction.DESCENDING)
+                .whereNotEqualTo("imageUrl", null);
 
         FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
                 .setQuery(query, MessageModel.class).build();
