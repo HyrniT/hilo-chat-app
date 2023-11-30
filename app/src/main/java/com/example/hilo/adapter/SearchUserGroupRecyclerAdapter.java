@@ -43,6 +43,7 @@ public class SearchUserGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Use
                     if (task.isSuccessful()) {
                         Uri uri = task.getResult();
                         AndroidUtil.setUriToImageView(context, uri, holder.imvAvatar);
+                        holder.imvAvatar.setPadding(0, 0, 0, 0);
                     }
                 }
             });

@@ -48,6 +48,7 @@ public class GroupRecyclerAdapter extends FirestoreRecyclerAdapter<GroupModel, G
                                 if (task.isSuccessful()) {
                                     Uri uri = task.getResult();
                                     AndroidUtil.setUriToImageView(context, uri, holder.imvAvatar);
+                                    holder.imvAvatar.setPadding(0, 0, 0, 0);
                                 }
                             }
                         });
