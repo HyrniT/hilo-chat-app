@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+//import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -15,6 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import android.net.Uri;
 import android.content.Context;
+import android.util.Base64;
 
 public class EncryptionUtil {
 
@@ -38,7 +39,7 @@ public class EncryptionUtil {
             System.arraycopy(iv, 0, combined, 0, iv.length);
             System.arraycopy(textEncrypted, 0, combined, iv.length, textEncrypted.length);
 
-            return Base64.getEncoder().encodeToString(combined);
+            return Base64.encodeToString(combined, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -49,7 +50,7 @@ public class EncryptionUtil {
         try {
             Cipher aesCipher = Cipher.getInstance(ENCRYPTION_MODE);
 
-            byte[] combined = Base64.getDecoder().decode(encryptedMessage);
+            byte[] combined = Base64.decode(encryptedMessage, Base64.DEFAULT);
             byte[] iv = new byte[aesCipher.getBlockSize()];
             byte[] textEncrypted = new byte[combined.length - iv.length];
 
@@ -70,11 +71,18 @@ public class EncryptionUtil {
     public static String encryptImage(byte[] imageBytes) {
         try {
             Cipher cipher = Cipher.getInstance(ENCRYPTION_MODE);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
 
+            byte[] iv = new byte[cipher.getBlockSize()];
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+            cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
             byte[] encryptedBytes = cipher.doFinal(imageBytes);
-//            return Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
-            return new String(Base64.getDecoder().decode(encryptedBytes));
+
+            byte[] combined = new byte[iv.length + encryptedBytes.length];
+            System.arraycopy(iv, 0, combined, 0, iv.length);
+            System.arraycopy(encryptedBytes, 0, combined, iv.length, encryptedBytes.length);
+
+            return Base64.encodeToString(combined, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -84,9 +92,16 @@ public class EncryptionUtil {
     public static byte[] decryptImage(String encryptedImage) {
         try {
             Cipher cipher = Cipher.getInstance(ENCRYPTION_MODE);
-            cipher.init(Cipher.DECRYPT_MODE, key);
 
-            byte[] encryptedBytes = Base64.getDecoder().decode(encryptedImage);
+            byte[] combined = Base64.decode(encryptedImage, Base64.DEFAULT);
+            byte[] iv = new byte[cipher.getBlockSize()];
+            byte[] encryptedBytes = new byte[combined.length - iv.length];
+
+            System.arraycopy(combined, 0, iv, 0, iv.length);
+            System.arraycopy(combined, iv.length, encryptedBytes, 0, encryptedBytes.length);
+
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
             return cipher.doFinal(encryptedBytes);
         } catch (Exception e) {
             e.printStackTrace();
