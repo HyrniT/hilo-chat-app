@@ -26,6 +26,7 @@ import com.example.hilo.model.GroupModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
+import com.example.hilo.utils.EncryptionUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -218,12 +219,13 @@ public class ChatGroupActivity extends AppCompatActivity {
     }
 
     private void sendText(String message) {
+        String encryptedMessage = EncryptionUtil.encrypt(message);
         groupModel.setLastSentMessageTimestamp(Timestamp.now());
         groupModel.setLastMessageSenderId(currentUserId);
         groupModel.setLastMessage(message);
         FirebaseUtil.getGroupReference(groupId).set(groupModel);
 
-        MessageModel messageModel = new MessageModel(message, currentUserId, currentUsername, Timestamp.now());
+        MessageModel messageModel = new MessageModel(encryptedMessage, currentUserId, currentUsername, Timestamp.now());
 
         FirebaseUtil.getGroupMessageCollection(groupId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override

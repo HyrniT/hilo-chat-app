@@ -29,6 +29,7 @@ import com.example.hilo.PhotoViewActivity;
 import com.example.hilo.R;
 import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.MessageModel;
+import com.example.hilo.utils.EncryptionUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.example.hilo.utils.AndroidUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -85,7 +86,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                     holder.layoutLeftMessage.setVisibility(View.GONE);
                     holder.layoutRightMessage.setVisibility(View.VISIBLE);
-                    holder.txtRightMessage.setText(model.getMessage());
+                    holder.txtRightMessage.setText(EncryptionUtil.decrypt(model.getMessage()));
                     holder.layoutRightMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_dark_primaryContainer)));
                     holder.txtRightMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_dark_onPrimaryContainer));
@@ -100,7 +101,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 } else {
                     holder.layoutLeftMessage.setVisibility(View.VISIBLE);
                     holder.layoutRightMessage.setVisibility(View.GONE);
-                    holder.txtLeftMessage.setText(model.getMessage());
+                    holder.txtLeftMessage.setText(EncryptionUtil.decrypt(model.getMessage()));
                     holder.layoutLeftMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_primaryContainer)));
                     holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_onPrimaryContainer));

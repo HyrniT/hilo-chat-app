@@ -30,6 +30,7 @@ import com.example.hilo.R;
 import com.example.hilo.model.GroupModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.utils.AndroidUtil;
+import com.example.hilo.utils.EncryptionUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -74,7 +75,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                 if (model.getSenderId().equals(FirebaseUtil.getCurrentUserId())) {
                     holder.layoutLeftMessage.setVisibility(View.GONE);
                     holder.layoutRightMessage.setVisibility(View.VISIBLE);
-                    holder.txtRightMessage.setText(model.getMessage());
+                    holder.txtRightMessage.setText(EncryptionUtil.decrypt(model.getMessage()));
                     holder.layoutRightMessage.setPadding(dp, dp, dp, dp);
                     holder.txtSenderName.setVisibility(View.GONE);
                     holder.layoutRightMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_dark_primaryContainer)));
@@ -114,7 +115,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     }
                     holder.layoutLeftMessage.setVisibility(View.VISIBLE);
                     holder.layoutRightMessage.setVisibility(View.GONE);
-                    holder.txtLeftMessage.setText(model.getMessage());
+                    holder.txtLeftMessage.setText(EncryptionUtil.decrypt(model.getMessage()));
                     holder.layoutLeftMessage.setPadding(dp, dp, dp, dp);
                     holder.layoutLeftMessage.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_theme_light_primaryContainer)));
                     holder.txtLeftMessage.setTextColor(ContextCompat.getColor(context, R.color.md_theme_light_onPrimaryContainer));

@@ -24,6 +24,7 @@ import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
+import com.example.hilo.utils.EncryptionUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -246,13 +247,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendText(String message) {
+        String encryptedMessage = EncryptionUtil.encrypt(message);
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);
         chatroomModel.setLastMessage(message);
         chatroomModel.setRead(false);
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
 
-        MessageModel messageModel = new MessageModel(message, currentUserId, currentUsername, Timestamp.now());
+        MessageModel messageModel = new MessageModel(encryptedMessage, currentUserId, currentUsername, Timestamp.now());
         FirebaseUtil.getChatroomMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
