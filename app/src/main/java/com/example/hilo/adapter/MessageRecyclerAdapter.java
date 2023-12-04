@@ -96,7 +96,7 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                     } else {
                         holder.imgRightMessage.setVisibility(View.VISIBLE);
                         holder.layoutRightMessage.setPadding(0, 0, 0, 0);
-                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
+                        downloadAndDisplayImage(model.getImageUrl(), holder.imgRightMessage);
                     }
                 } else {
                     holder.layoutLeftMessage.setVisibility(View.VISIBLE);
@@ -111,10 +111,25 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                     } else {
                         holder.imgLeftMessage.setVisibility(View.VISIBLE);
                         holder.layoutLeftMessage.setPadding(0, 0, 0, 0);
-                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
+                        downloadAndDisplayImage(model.getImageUrl(), holder.imgLeftMessage);
                     }
                 }
             }
+        }
+    }
+
+    private void downloadAndDisplayImage(String encryptedImageUrl, ImageView imageView) {
+        try {
+            // Giải mã URL của ảnh
+            byte[] decryptedImageUrlBytes = EncryptionUtil.decryptImage(encryptedImageUrl);
+            if (decryptedImageUrlBytes != null) {
+                String decryptedImageUrl = new String(decryptedImageUrlBytes);
+
+                // Sử dụng thư viện Glide để load ảnh từ URL
+                AndroidUtil.setUriToImageViewRec(context, Uri.parse(decryptedImageUrl), imageView);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

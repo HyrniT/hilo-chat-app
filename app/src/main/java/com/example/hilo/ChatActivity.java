@@ -274,7 +274,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendImage(String imageUrl) {
-        MessageModel messageModel = new MessageModel(currentUserId, currentUsername, Timestamp.now(), imageUrl);
+        String encryptedImageUrl = EncryptionUtil.encryptImage(imageUrl.getBytes());
+        MessageModel messageModel = new MessageModel(currentUserId, currentUsername, Timestamp.now(), encryptedImageUrl);
 
         chatroomModel.setLastSentMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(currentUserId);

@@ -87,7 +87,7 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                         holder.txtSenderName.setVisibility(View.GONE);
                         holder.imgRightMessage.setVisibility(View.VISIBLE);
                         holder.layoutRightMessage.setPadding(0, 0, 0, 0);
-                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgRightMessage);
+                        downloadAndDisplayImage(model.getImageUrl(), holder.imgRightMessage);
                     }
                 } else {
                     // Khi thêm 1 tin nhắn mới vào Adapter thì có position là 0 -> tin nhắn cũ nhất có position là getItemCount() - 1
@@ -125,10 +125,25 @@ public class MessageGroupRecyclerAdapter extends FirestoreRecyclerAdapter<Messag
                     } else {
                         holder.imgLeftMessage.setVisibility(View.VISIBLE);
                         holder.layoutLeftMessage.setPadding(0, 0, 0, 0);
-                        AndroidUtil.setUriToImageViewRec(context, Uri.parse(model.getImageUrl()), holder.imgLeftMessage);
+                        downloadAndDisplayImage(model.getImageUrl(), holder.imgLeftMessage);
                     }
                 }
             }
+        }
+    }
+
+    private void downloadAndDisplayImage(String encryptedImageUrl, ImageView imageView) {
+        try {
+            // Giải mã URL của ảnh
+            byte[] decryptedImageUrlBytes = EncryptionUtil.decryptImage(encryptedImageUrl);
+            if (decryptedImageUrlBytes != null) {
+                String decryptedImageUrl = new String(decryptedImageUrlBytes);
+
+                // Sử dụng thư viện Glide để load ảnh từ URL
+                AndroidUtil.setUriToImageViewRec(context, Uri.parse(decryptedImageUrl), imageView);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
