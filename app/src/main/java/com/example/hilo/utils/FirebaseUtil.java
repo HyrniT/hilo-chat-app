@@ -101,7 +101,7 @@ public class FirebaseUtil {
                 .getInstance()
                 .getReference()
                 .child("avatar")
-                .child(FirebaseUtil.getCurrentUserId());
+                .child(FirebaseUtil.getCurrentUserId() + ".jpg");
     }
 
     public static StorageReference getOtherUserAvatarReference(String otherUserId) {
@@ -109,7 +109,7 @@ public class FirebaseUtil {
                 .getInstance()
                 .getReference()
                 .child("avatar")
-                .child(otherUserId);
+                .child(otherUserId + ".jpg");
     }
 
     public static StorageReference getGroupAvatarReference(String groupId) {
@@ -117,7 +117,7 @@ public class FirebaseUtil {
                 .getInstance()
                 .getReference()
                 .child("avatar")
-                .child(groupId);
+                .child(groupId + ".jpg");
     }
 
     public interface OnImageUploadListener {
