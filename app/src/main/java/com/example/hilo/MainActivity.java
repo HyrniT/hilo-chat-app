@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 String userName = currentUserModel.getUsername();
 
                 ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-                callInvitationConfig.notifyWhenAppRunningInBackgroundOrQuit = true;
+//                callInvitationConfig.notifyWhenAppRunningInBackgroundOrQuit = true;
                 ZegoNotificationConfig notificationConfig = new ZegoNotificationConfig();
                 notificationConfig.sound = "zego_uikit_sound_call";
                 notificationConfig.channelID = "CallInvitation";
