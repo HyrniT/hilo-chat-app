@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/layoutLeftMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_rounded_corner"
+        android:backgroundTint="@color/md_theme_light_primaryContainer"
+        android:layout_marginEnd="80dp"
+        android:layout_marginVertical="4dp">
+
+        <TextView
+            android:id="@+id/txtLeftMessage"
+            android:fontFamily="@font/nunito_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/md_theme_light_onPrimaryContainer"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutRightMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/rectangle_rounded_corner"
+        android:backgroundTint="@color/md_theme_dark_primaryContainer"
+        android:layout_marginStart="80dp"
+        android:layout_marginVertical="4dp">
+
+        <TextView
+            android:id="@+id/txtRightMessage"
+            android:fontFamily="@font/nunito_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/md_theme_dark_onPrimaryContainer"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

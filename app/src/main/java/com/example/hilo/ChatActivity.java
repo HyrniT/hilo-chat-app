@@ -201,6 +201,7 @@ public class ChatActivity extends AppCompatActivity {
                                 Arrays.asList(currentUserId, otherUserId),
                                 Timestamp.now(),
                                 "",
+                                "",
                                 true
                         );
                         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);

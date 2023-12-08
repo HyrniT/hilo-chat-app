@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.example.hilo.adapter.MessageRecyclerAdapter;
+import com.example.hilo.adapter.MessageAiRecyclerAdapter;
 import com.example.hilo.model.ChatroomAiModel;
-import com.example.hilo.model.MessageModel;
+import com.example.hilo.model.MessageAiModel;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +43,7 @@ public class ChatGptActivity extends AppCompatActivity {
     private RecyclerView recyclerViewMessage;
     private String currentUserId, chatroomId;
     private ChatroomAiModel chatroomAiModel;
-    private MessageRecyclerAdapter adapter;
+    private MessageAiRecyclerAdapter adapter;
     MediaType JSON = MediaType.get("application/json");
     OkHttpClient client = new OkHttpClient();
     @Override
@@ -74,13 +74,7 @@ public class ChatGptActivity extends AppCompatActivity {
                     return;
                 }
                 sendMessage(message);
-//                callApi(message);
-                if (message.equals("hi")) {
-                    receiveMessage("Hello! How can I assist you today?");
-                }
-                if (message.equals("bye")) {
-                    receiveMessage("Goodbye! If you ever have more questions or need assistance in the future, feel free to reach out. Take care!");
-                }
+                callApi(message);
             }
         });
 
@@ -103,11 +97,11 @@ public class ChatGptActivity extends AppCompatActivity {
         Query query = FirebaseUtil.getChatroomAiMessageCollection(chatroomId)
                 .orderBy("sentTimestamp", Query.Direction.DESCENDING);
 
-        FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
-                .setQuery(query, MessageModel.class).build();
+        FirestoreRecyclerOptions<MessageAiModel> options = new FirestoreRecyclerOptions.Builder<MessageAiModel>()
+                .setQuery(query, MessageAiModel.class).build();
 
         if (adapter == null) {
-            adapter = new MessageRecyclerAdapter(options, getApplicationContext());
+            adapter = new MessageAiRecyclerAdapter(options, getApplicationContext());
             LinearLayoutManager manager = new LinearLayoutManager(this);
             manager.setReverseLayout(true);
             recyclerViewMessage.setLayoutManager(manager);
@@ -133,7 +127,7 @@ public class ChatGptActivity extends AppCompatActivity {
             chatroomAiModel.setLastMessage(message);
             FirebaseUtil.getChatroomAiReference(chatroomId).set(chatroomAiModel);
 
-            MessageModel messageModel = new MessageModel(message, currentUserId, Timestamp.now());
+            MessageAiModel messageModel = new MessageAiModel(message, currentUserId, Timestamp.now());
             FirebaseUtil.getChatroomAiMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -152,7 +146,7 @@ public class ChatGptActivity extends AppCompatActivity {
             chatroomAiModel.setLastMessage(message);
             FirebaseUtil.getChatroomAiReference(chatroomId).set(chatroomAiModel);
 
-            MessageModel messageModel = new MessageModel(message, "chatgpt", Timestamp.now());
+            MessageAiModel messageModel = new MessageAiModel(message, "chatgpt", Timestamp.now());
             FirebaseUtil.getChatroomAiMessageCollection(chatroomId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -169,7 +163,7 @@ public class ChatGptActivity extends AppCompatActivity {
         try {
             jsonObject.put("model", "gpt-3.5-turbo-instruct");
             jsonObject.put("prompt", question);
-            jsonObject.put("max_tokens", 7);
+            jsonObject.put("max_tokens", 500);
             jsonObject.put("temperature", 0);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -180,7 +174,7 @@ public class ChatGptActivity extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer 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")
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
