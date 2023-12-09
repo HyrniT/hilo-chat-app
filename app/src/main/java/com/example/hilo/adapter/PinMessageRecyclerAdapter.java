@@ -26,6 +26,7 @@ import com.example.hilo.R;
 import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.MessageModel;
 import com.example.hilo.utils.AndroidUtil;
+import com.example.hilo.utils.EncryptionUtil;
 import com.example.hilo.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -50,7 +51,7 @@ public class PinMessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageM
     protected void onBindViewHolder(@NonNull PinMessageRecyclerAdapter.PinMessageModelViewHolder holder, int position, @NonNull MessageModel model) {
         if (model != null) {
             holder.txtUsername.setText(model.getSenderName());
-            holder.txtMessage.setText(model.getMessage());
+            holder.txtMessage.setText(EncryptionUtil.decrypt(model.getMessage()));
         }
     }
 
