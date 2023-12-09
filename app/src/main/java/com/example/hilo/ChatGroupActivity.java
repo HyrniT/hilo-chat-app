@@ -20,11 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hilo.adapter.MessageGroupRecyclerAdapter;
-import com.example.hilo.adapter.MessageRecyclerAdapter;
-import com.example.hilo.model.ChatroomModel;
 import com.example.hilo.model.GroupModel;
 import com.example.hilo.model.MessageModel;
-import com.example.hilo.model.UserModel;
 import com.example.hilo.utils.AndroidUtil;
 import com.example.hilo.utils.EncryptionUtil;
 import com.example.hilo.utils.FirebaseUtil;
@@ -38,11 +35,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import kotlin.Unit;
@@ -246,12 +239,13 @@ public class ChatGroupActivity extends AppCompatActivity {
     }
 
     private void sendImage(String imageUrl) {
+        String encryptedImageUrl = EncryptionUtil.encryptImage(imageUrl.getBytes());
         groupModel.setLastSentMessageTimestamp(Timestamp.now());
         groupModel.setLastMessageSenderId(currentUserId);
         groupModel.setLastMessage("Sent a photo");
         FirebaseUtil.getGroupReference(groupId).set(groupModel);
 
-        MessageModel messageModel = new MessageModel(currentUserId, currentUsername, Timestamp.now(), imageUrl);
+        MessageModel messageModel = new MessageModel(currentUserId, currentUsername, Timestamp.now(), encryptedImageUrl);
 
         FirebaseUtil.getGroupMessageCollection(groupId).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
