@@ -288,7 +288,8 @@ public class MessageRecyclerAdapter extends FirestoreRecyclerAdapter<MessageMode
                 MessageModel selectedMessage = getItem(position);
                 if (selectedMessage != null) {
                     String messageText = selectedMessage.getMessage();
-                    ClipData clipData = ClipData.newPlainText("message", messageText);
+                    String decryptedMessage = EncryptionUtil.decrypt(messageText);
+                    ClipData clipData = ClipData.newPlainText("message", decryptedMessage);
                     clipboardManager.setPrimaryClip(clipData);
 
                     AndroidUtil.showToast(context, "Copied");
